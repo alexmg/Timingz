@@ -1,5 +1,9 @@
 # Timingz
 
+Master: ![Master CI Build](https://github.com/alexmg/Timingz/workflows/CI%20Build/badge.svg)
+
+Develop: ![Develop CI Build](https://github.com/alexmg/Timingz/workflows/CI%20Build/badge.svg?branch=develop)
+
 Timingz is an ASP.NET Core middleware implementation for recording and communicating backend server metrics as outlined in the [Server Timing](https://www.w3.org/TR/server-timing/) specification. These timings can be viewed using the browser's developer tools and accessed using the [PerformanceServerTiming](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceServerTiming) interface.
 
 ![alt Timing](assets/Timing.png)
