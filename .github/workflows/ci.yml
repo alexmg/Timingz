@@ -29,4 +29,4 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests
     - name: Pack
-      run: dotnet pack ./src/Timingz
+      run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
