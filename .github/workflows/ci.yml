@@ -23,6 +23,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
+        source-url: https://nuget.pkg.github.com/alexmg/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Restore
       run: dotnet restore
@@ -40,4 +43,4 @@ jobs:
       run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
 
     - name: Publish
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/alexmg/index.json
+      run: dotnet nuget push **/*.nupkg
