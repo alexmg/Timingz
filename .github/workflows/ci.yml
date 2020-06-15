@@ -31,7 +31,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests --settings ./coverlet.settings
+      run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests --settings ./coverlet.settings --results-directory ./coverage
 
     - name: Move test coverage results
       run: mv ./coverage/**/*.info ./coverage
