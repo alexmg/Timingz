@@ -25,15 +25,16 @@ jobs:
         fetch-depth: 0
 
     - name: Setup .NET Core
+      if: ${{ success() }}
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
 
     - name: Setup NuGet
-        if: ${{ success() }}
-        uses: NuGet/setup-nuget@v1
-        with:
-          nuget-version: latest
+      if: ${{ success() }}
+      uses: NuGet/setup-nuget@v1
+      with:
+        nuget-version: latest
 
     - name: Add GitHub source to NuGet
       if: ${{ success() }}
