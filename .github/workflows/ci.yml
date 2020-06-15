@@ -33,13 +33,8 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests --settings ./coverlet.settings
 
-    - name: Move test coverage results UNIX
-      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
-      run: ./coverage/**/*.info ./coverage
-    
-    - name: Move test coverage results WINDOWS
-      if: matrix.os == 'windows-latest'
-      run: move coverage\**\*.info coverage
+    - name: Move test coverage results
+      run: mv ./coverage/**/*.info ./coverage
 
     - name: Pack
       run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
