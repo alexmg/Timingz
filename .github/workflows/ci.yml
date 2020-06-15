@@ -30,43 +30,43 @@ jobs:
         dotnet-version: 3.1.101
 
     - name: Setup NuGet
-        if: success()
+        if: ${{ success() }}
         uses: NuGet/setup-nuget@v1
         with:
           nuget-version: latest
 
     - name: Add GitHub source to NuGet
-      if: success()
+      if: ${{ success() }}
       run: nuget sources add -name github -Source $GITHUB_SOURCE -Username $GITHUB_USER -Password ${{ secrets.GITHUB_TOKEN }}
 
     - name: Set GitHub packages API key
-      if: success()
+      if: ${{ success() }}
       run: nuget setapikey ${{ secrets.GITHUB_TOKEN }} -Source $GITHUB_SOURCE
 
     - name: Restore NuGet packages
-      if: success()
+      if: ${{ success() }}
       run: dotnet restore
 
     - name: Build solution
-      if: success()
+      if: ${{ success() }}
       run: dotnet build --configuration Release --no-restore
 
     - name: Run unit tests
-      if: success()
+      if: ${{ success() }}
       run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests --settings ./coverlet.settings --results-directory ./coverage
 
     - name: Move test coverage results
-      if: success()
+      if: ${{ success() }}
       run: mv ./coverage/**/*.info ./coverage
 
     - name: Pack
-      if: success()
+      if: ${{ success() }}
       run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
 
     - name: Publish to GitHub Packages
-      if: success()
+      if: ${{ success() }}
       run: dotnet nuget push ./src/**/*.nupkg --source github --skip-duplicate
 
     - name: Publish to NuGet.org
-      if: success() && github.ref == 'refs/heads/master'
+      if: ${{ success() && github.ref == 'refs/heads/master' }}
       run: dotnet nuget push ./src/**/*.nupkg --source $NUGET_SOURCE --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
