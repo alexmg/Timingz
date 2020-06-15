@@ -9,6 +9,11 @@ on:
     branches:
       - develop
 
+env:
+  GITHUB_SOURCE: https://nuget.pkg.github.com/alexmg/index.json
+  GITHUB_USER: alexmg
+  NUGET_SOURCE: https://api.nuget.org/v3/index.json
+
 jobs:
   build:
 
@@ -23,26 +28,45 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-        source-url: https://nuget.pkg.github.com/alexmg/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    - name: Restore
+    - name: Setup NuGet
+        if: success()
+        uses: NuGet/setup-nuget@v1
+        with:
+          nuget-version: latest
+
+    - name: Add GitHub source to NuGet
+      if: success()
+      run: nuget sources add -name github -Source $GITHUB_SOURCE -Username $GITHUB_USER -Password ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set GitHub packages API key
+      if: success()
+      run: nuget setapikey ${{ secrets.GITHUB_TOKEN }} -Source $GITHUB_SOURCE
+
+    - name: Restore NuGet packages
+      if: success()
       run: dotnet restore
 
-    - name: Build
+    - name: Build solution
+      if: success()
       run: dotnet build --configuration Release --no-restore
 
-    - name: Test
+    - name: Run unit tests
+      if: success()
       run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests --settings ./coverlet.settings --results-directory ./coverage
 
     - name: Move test coverage results
+      if: success()
       run: mv ./coverage/**/*.info ./coverage
 
     - name: Pack
+      if: success()
       run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
 
-    - name: Publish
-      env:
-        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      run: dotnet nuget push **/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate
+    - name: Publish to GitHub Packages
+      if: success()
+      run: dotnet nuget push ./src/**/*.nupkg --source github --skip-duplicate
+
+    - name: Publish to NuGet.org
+      if: success() && github.ref == 'refs/heads/master'
+      run: dotnet nuget push ./src/**/*.nupkg --source $NUGET_SOURCE --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
