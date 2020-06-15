@@ -40,5 +40,6 @@ jobs:
       run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
 
     - name: Publish
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/alexmg/index.json
-
+      env:
+        API_KEY: ${{secrets.GITHUB_TOKEN}}
+      run: dotnet nuget push **/*.nupkg --api-key $API_KEY --source https://nuget.pkg.github.com/alexmg/index.json --skip-duplicate
