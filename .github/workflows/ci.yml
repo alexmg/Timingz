@@ -62,12 +62,12 @@ jobs:
 
     - name: Pack
       if: ${{ success() }}
-      run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
+      run: dotnet pack ./src/Timingz --output ./nuget /p:NoPackageAnalysis=true
 
     - name: Publish to GitHub Packages
       if: ${{ success() }}
-      run: dotnet nuget push ./src/**/*.nupkg --source github --skip-duplicate
+      run: nuget push ./nuget/*.nupkg -Source github -SkipDuplicate
 
     - name: Publish to NuGet.org
       if: ${{ success() && github.ref == 'refs/heads/master' }}
-      run: dotnet nuget push ./src/**/*.nupkg --source $NUGET_SOURCE --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      run: nuget push ./nuget/*.nupkg -Source $NUGET_SOURCE -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate
