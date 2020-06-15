@@ -38,3 +38,6 @@ jobs:
 
     - name: Pack
       run: dotnet pack ./src/Timingz /p:NoPackageAnalysis=true
+
+    - name: Publish
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/alexmg/index.json
