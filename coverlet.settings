@@ -4,8 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>cobertura</Format>
-          <!-- <Exclude>[Timingz]GitVersionInformation</Exclude> -->
+          <Format>lcov</Format>
           <ExcludeByFile>**/GitVersionInformation.g.cs</ExcludeByFile>
           <IncludeTestAssembly>false</IncludeTestAssembly>
         </Configuration>
