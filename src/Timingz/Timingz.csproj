@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Alex Meyer-Gleaves</Authors>
     <PackageTags>server-timing;metrics</PackageTags>
     <PackageProjectUrl>https://github.com/alexmg/Timingz</PackageProjectUrl>
@@ -27,6 +33,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.5" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Perfolizer" Version="0.2.1" />
     <PackageReference Include="ZString" Version="2.1.2" />
   </ItemGroup>
