@@ -40,16 +40,6 @@ namespace Timingz.Tests
             ctr.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("options");
         }
 
-        [Fact]
-        public void ConstructorValidatesOptions()
-        {
-            var options = new ServerTimingOptions {ConfigureRequestTimingOptions = null};
-            // ReSharper disable once ObjectCreationAsStatement
-            Action ctr = () => new ServerTimingMiddleware(_ => Task.CompletedTask, options, null);
-            ctr.Should().Throw<Exception>()
-                .Which.Message.Should().Contain(nameof(ServerTimingOptions.ConfigureRequestTimingOptions));
-        }
-
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -274,13 +264,12 @@ namespace Timingz.Tests
                             options.TimingAllowOrigins = timingAllowOrigins;
                             options.TotalMetricName = totalMetricName;
                             options.TotalMetricDescription = totalMetricDescription;
-                            options.ConfigureRequestTimingOptions =
-                                (context, timingOptions) =>
-                                {
-                                    timingOptions.WriteHeader = writerHeader;
-                                    timingOptions.IncludeDescriptions = includeDescriptions;
-                                    timingOptions.IncludeCustomMetrics = includeCustomMetrics;
-                                };
+                            options.WithRequestTimingOptions((context, timingOptions) =>
+                            {
+                                timingOptions.WriteHeader = writerHeader;
+                                timingOptions.IncludeDescriptions = includeDescriptions;
+                                timingOptions.IncludeCustomMetrics = includeCustomMetrics;
+                            });
                         })
                         .Use(async (context, next) =>
                         {

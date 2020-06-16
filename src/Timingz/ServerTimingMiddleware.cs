@@ -21,8 +21,6 @@ namespace Timingz
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger;
 
-            options.Validate();
-
             _headerWriter = new HeaderWriter(options.TimingAllowOrigins);
         }
 

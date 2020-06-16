@@ -57,7 +57,7 @@ Update `Configure` in your `Startup` class or host builder to include a call to 
 app.UseServerTiming(options =>
 {
     // Configure the per-request options.
-    options.ConfigureRequestTimingOptions = (httpContext, requestOptions) =>
+    options.WithRequestTimingOptions((httpContext, requestOptions) =>
     {
         // The use of a query string parameter is only for demonstration.
         var query = httpContext.Request.Query;
@@ -70,7 +70,7 @@ app.UseServerTiming(options =>
 
         // Enable/disable the inclusion of custom metric values.
         requestOptions.IncludeCustomMetrics = query.ContainsKey("custom");
-    };
+    });
 
     // Add any required domains for the Timing-Allow-Origin header.
     options.TimingAllowOrigins = new[] {"http://example.com"};

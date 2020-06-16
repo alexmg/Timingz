@@ -38,7 +38,7 @@ namespace WebApiSample
             // Add the middleware before UseEndpoints.
             app.UseServerTiming(options =>
             {
-                options.ConfigureRequestTimingOptions = (httpContext, requestOptions) =>
+                options.WithRequestTimingOptions((httpContext, requestOptions) =>
                 {
                     // The sample uses query string parameters to provide an easy way of toggling the settings
                     // and seeing the resulting change in behaviour. Replace these with something more appropriate
@@ -56,7 +56,7 @@ namespace WebApiSample
                     // Custom metrics could expose sensitive information in the Server-Timing header and must be explicitly enabled.
                     // You can choose to include additional metrics (other than the request total duration) conditionally.
                     requestOptions.IncludeCustomMetrics = query.ContainsKey("custom");
-                };
+                });
 
                 // Add any required origins for the Timing-Allow-Origin header.
                 options.TimingAllowOrigins = new[] {"http://example.com"};

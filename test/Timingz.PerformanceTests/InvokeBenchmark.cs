@@ -15,9 +15,9 @@ namespace Timingz.PerformanceTests
         {
             _serverTimingOptions = new ServerTimingOptions
             {
-                InvokeCallbackServices = true,
-                ConfigureRequestTimingOptions = (_, requestOptions) => requestOptions.WriteHeader = true
+                InvokeCallbackServices = true
             };
+            _serverTimingOptions.WithRequestTimingOptions((_, requestOptions) => requestOptions.WriteHeader = true);
             _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, _serverTimingOptions, null);
             _callbacks = Factory.CreateCallbacks(1);
         }

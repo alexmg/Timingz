@@ -7,15 +7,27 @@ namespace Timingz
 {
     public class ServerTimingOptions
     {
+        private string _totalMetricName = DefaultTotalMetricName;
+        
         internal const string DefaultTotalMetricName = "total";
-
+        
         internal const string DefaultTotalDescription = "Total";
 
-        public string TotalMetricName { get; set; } = DefaultTotalMetricName;
+        public string TotalMetricName
+        {
+            get => _totalMetricName;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("A valid name must be provided", nameof(TotalMetricName));
+                _totalMetricName = value;
+            }
+        }
 
         public string TotalMetricDescription { get; set; } = DefaultTotalDescription;
 
-        public Action<HttpContext, RequestTimingOptions> ConfigureRequestTimingOptions { get; set; } = (_, __) => { };
+        public void WithRequestTimingOptions(Action<HttpContext, RequestTimingOptions> configure) =>
+            ConfigureRequestTimingOptions = configure ?? throw new ArgumentNullException(nameof(configure));
 
         public IEnumerable<string> TimingAllowOrigins { get; set; } = Enumerable.Empty<string>();
 
@@ -23,17 +35,6 @@ namespace Timingz
 
         public bool ValidateMetrics { get; set; }
 
-        internal void Validate()
-        {
-            static string Property(string property) => $"{nameof(ServerTimingOptions)}.{property}";
-
-            if (string.IsNullOrWhiteSpace(TotalMetricName))
-                throw new Exception(
-                    $"A name must be provided for the {Property(nameof(TotalMetricName))} option.");
-
-            if (ConfigureRequestTimingOptions == null)
-                throw new Exception(
-                    $"An action must be provided for the {Property(nameof(ConfigureRequestTimingOptions))} option.");
-        }
+        internal Action<HttpContext, RequestTimingOptions> ConfigureRequestTimingOptions { get; set; } = (_, __) => { };
     }
 }

@@ -25,6 +25,24 @@ namespace Timingz.Tests
         }
 
         [Fact]
+        public void WithRequestTimingOptionsThrowsWhenActionNull()
+        {
+            var options = new ServerTimingOptions();
+            Action invoke = () => options.WithRequestTimingOptions(null);
+            invoke.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void WithRequestTimingOptionsCapturesAction()
+        {
+            var options = new ServerTimingOptions();
+            var called = false;
+            options.WithRequestTimingOptions((_, __) => called = true);
+            options.ConfigureRequestTimingOptions(null, null);
+            called.Should().BeTrue();
+        }
+
+        [Fact]
         public void TotalMetricNameInitializedToDefault()
         {
             var options = new ServerTimingOptions();
@@ -52,32 +70,16 @@ namespace Timingz.Tests
             options.InvokeCallbackServices.Should().BeFalse();
         }
 
-        [Fact]
-        public void InitialOptionsStateIsValid()
-        {
-            Action validate = () => new ServerTimingOptions().Validate();
-            validate.Should().NotThrow();
-        }
-
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public void ValidateThrowsExceptionWhenTotalMetricNameInvalid(string totalMetricName)
+        public void TotalMetricNamePropertyValidatesValue(string totalMetricName)
         {
-            var options = new ServerTimingOptions {TotalMetricName = totalMetricName};
-            Action validate = () => options.Validate();
-            validate.Should().Throw<Exception>()
-                .Which.Message.Should().Contain(nameof(ServerTimingOptions.TotalMetricName));
-        }
-
-        [Fact]
-        public void ValidateThrowsExceptionWhenConfigureRequestTimingOptionsIsNull()
-        {
-            var options = new ServerTimingOptions {ConfigureRequestTimingOptions = null};
-            Action validate = () => options.Validate();
-            validate.Should().Throw<Exception>()
-                .Which.Message.Should().Contain(nameof(ServerTimingOptions.ConfigureRequestTimingOptions));
+            var options = new ServerTimingOptions();
+            Action validate = () => options.TotalMetricName = totalMetricName;
+            validate.Should().Throw<ArgumentException>()
+                .Which.ParamName.Should().Contain(nameof(ServerTimingOptions.TotalMetricName));
         }
     }
 }
