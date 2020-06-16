@@ -9,11 +9,6 @@ on:
     branches:
       - develop
 
-env:
-  GITHUB_SOURCE: https://nuget.pkg.github.com/alexmg/index.json
-  GITHUB_USER: alexmg
-  NUGET_SOURCE: https://api.nuget.org/v3/index.json
-
 jobs:
   build:
 
@@ -29,20 +24,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-
-    - name: Setup NuGet
-      if: ${{ success() }}
-      uses: NuGet/setup-nuget@v1
-      with:
-        nuget-version: latest
-
-    - name: Add GitHub source to NuGet
-      if: ${{ success() }}
-      run: nuget sources add -name github -Source $GITHUB_SOURCE -Username $GITHUB_USER -Password ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Set GitHub packages API key
-      if: ${{ success() }}
-      run: nuget setapikey ${{ secrets.GITHUB_TOKEN }} -Source $GITHUB_SOURCE
+        source-url: https://nuget.pkg.github.com/alexmg/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Restore NuGet packages
       if: ${{ success() }}
@@ -66,8 +50,8 @@ jobs:
 
     - name: Publish to GitHub Packages
       if: ${{ success() }}
-      run: nuget push ./nuget/*.nupkg -Source github -SkipDuplicate
+      run: dotnet nuget push ./nuget/*.nupkg --skip-duplicate
 
     - name: Publish to NuGet.org
       if: ${{ success() && github.ref == 'refs/heads/master' }}
-      run: nuget push ./nuget/*.nupkg -Source $NUGET_SOURCE -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate
+      run: dotnet nuget push ./nuget/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
