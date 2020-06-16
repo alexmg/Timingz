@@ -50,7 +50,9 @@ jobs:
 
     - name: Publish to GitHub Packages
       if: ${{ success() }}
-      run: dotnet nuget push ./nuget/*.nupkg --skip-duplicate
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_API_KEY --skip-duplicate
 
     - name: Publish to NuGet.org
       if: ${{ success() && github.ref == 'refs/heads/master' }}
