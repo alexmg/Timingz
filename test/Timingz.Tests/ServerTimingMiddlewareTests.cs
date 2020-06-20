@@ -173,7 +173,7 @@ namespace Timingz.Tests
 
             await client.GetAsync("/");
 
-            _logger.LogMessages
+            _logger.GetLogMessages()
                 .Any(m => m.LogLevel == LogLevel.Warning && m.Message.Contains(metricName))
                 .Should().Be(validateMetrics);
         }
@@ -225,8 +225,9 @@ namespace Timingz.Tests
 
             await client.GetAsync("/");
 
-            _logger.LogMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "A");
-            _logger.LogMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "B");
+            var logMessages = _logger.GetLogMessages();
+            logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "A");
+            logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "B");
         }
 
         private Task<IHost> BuildHost(
@@ -347,14 +348,23 @@ namespace Timingz.Tests
 
         private class TestLogger<TName> : ILogger<TName>
         {
-            public IList<LogMessage> LogMessages { get; } = new List<LogMessage>();
+            private readonly IList<LogMessage> _logMessages = new List<LogMessage>();
+
+            public IList<LogMessage> GetLogMessages()
+            {
+                lock (_logMessages) return _logMessages.ToList();
+            }
 
             public IDisposable BeginScope<TState>(TState state) => null;
 
             public bool IsEnabled(LogLevel logLevel) => true;
 
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter) =>
-                LogMessages.Add(new LogMessage(logLevel, formatter == null ? state.ToString() : formatter(state, exception), exception));
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            {
+                var message = formatter == null ? state.ToString() : formatter(state, exception);
+                var logMessage = new LogMessage(logLevel, message, exception);
+                lock (_logMessages) _logMessages.Add(logMessage);
+            }
         }
 
         private class CallbackThatThrowsException : IServerTimingCallback
