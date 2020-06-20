@@ -21,6 +21,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/alexmg/Timingz</RepositoryUrl>
+    <Description>Server Timing middleware implementation for ASP.NET Core</Description>
   </PropertyGroup>
 
   <ItemGroup>
