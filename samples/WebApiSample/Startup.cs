@@ -38,6 +38,8 @@ namespace WebApiSample
             // Add the middleware before UseEndpoints.
             app.UseServerTiming(options =>
             {
+                // Use the callback below to configure the per-request options. You can use the provided HttpContext to tailor
+                // the options for individual requests or statically define the options and have them apply to all requests.
                 options.WithRequestTimingOptions((httpContext, requestOptions) =>
                 {
                     // The sample uses query string parameters to provide an easy way of toggling the settings
@@ -75,10 +77,7 @@ namespace WebApiSample
                 options.ValidateMetrics = env.IsDevelopment();
             });
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }
