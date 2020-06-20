@@ -52,7 +52,7 @@ jobs:
       if: ${{ success() }}
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_API_KEY --skip-duplicate
+      run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate
 
     - name: Publish to NuGet.org
       if: ${{ success() && github.ref == 'refs/heads/master' }}
