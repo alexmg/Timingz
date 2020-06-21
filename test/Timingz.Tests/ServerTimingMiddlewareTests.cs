@@ -226,6 +226,11 @@ namespace Timingz.Tests
             await client.GetAsync("/");
 
             var logMessages = _logger.GetLogMessages();
+            while (logMessages.Count < 2)
+            {
+                await Task.Delay(10); // Give the server time to run the OnCompleted handler for the response.
+                logMessages = _logger.GetLogMessages();
+            }
             logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "A");
             logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "B");
         }
