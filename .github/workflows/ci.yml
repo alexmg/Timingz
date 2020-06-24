@@ -35,13 +35,16 @@ jobs:
       run: dotnet restore
 
     - name: Build solution
-      run: dotnet build -c Release --no-restore
+      run: dotnet build -c Release --no-restore /p:GITHUB_ACTIONS=false
 
     - name: Run unit tests
       run: dotnet test ./test/Timingz.Tests --no-restore -c Release -v normal --settings ./coverlet.runsettings --results-directory ./coverage
 
     - name: Move test coverage results
       run: mv ./coverage/**/*.info ./coverage
+
+    - name: Clean
+      run: dotnet clean -c Release
 
     - name: Pack
       run: dotnet pack ./src/Timingz -c Release --output ./nuget /p:NoPackageAnalysis=true
