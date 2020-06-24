@@ -38,7 +38,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Run unit tests
-      run: dotnet test ./test/Timingz.Tests --no-restore --configuration Release --verbosity normal --settings ./coverlet.runsettings --results-directory ./coverage
+      run: dotnet test ./test/Timingz.Tests --no-restore --configuration Release --verbosity normal --settings ./coverlet.runsettings --results-directory ./coverage /p:DeterministicSourcePaths=false
 
     - name: Move test coverage results
       run: mv ./coverage/**/*.info ./coverage
