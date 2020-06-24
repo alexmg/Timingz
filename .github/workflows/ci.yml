@@ -38,7 +38,7 @@ jobs:
       run: dotnet build -c Release --no-restore
 
     - name: Run unit tests
-      run: dotnet test ./test/Timingz.Tests --no-restore -c Release -v normal /p:CollectCoverage=true /p:CoverletOutput='../../coverage/coverage.info' /p:CoverletOutputFormat=lcov
+      run: dotnet test ./test/Timingz.Tests --no-restore -c Release -v normal /p:AltCover=true /p:AltCoverLcovReport="../../coverage/coverage.info" /p:AltCoverAssemblyFilter="Timingz.Test|xunit" /p:AltCoverAttributeFilter="ExcludeFromCodeCoverage" /p:AltCoverSourceLink=true
 
     - name: Pack
       run: dotnet pack ./src/Timingz -c Release --output ./nuget /p:NoPackageAnalysis=true
