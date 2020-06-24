@@ -24,7 +24,6 @@ jobs:
         fetch-depth: 0
 
     - name: Setup .NET Core
-      if: ${{ success() }}
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
@@ -33,27 +32,21 @@ jobs:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Restore NuGet packages
-      if: ${{ success() }}
       run: dotnet restore
 
     - name: Build solution
-      if: ${{ success() }}
       run: dotnet build --configuration Release --no-restore
 
     - name: Run unit tests
-      if: ${{ success() }}
       run: dotnet test --no-restore --verbosity normal ./test/Timingz.Tests --settings ./coverlet.settings --results-directory ./coverage
 
     - name: Move test coverage results
-      if: ${{ success() }}
       run: mv ./coverage/**/*.info ./coverage
 
     - name: Pack
-      if: ${{ success() }}
       run: dotnet pack ./src/Timingz --output ./nuget /p:NoPackageAnalysis=true
 
     - name: Publish to GitHub Packages
-      if: ${{ success() }}
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate
@@ -62,7 +55,8 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./coverage/coverage.info
 
     - name: Publish to NuGet.org
-      if: ${{ success() && github.ref == 'refs/heads/master' }}
+      if: github.ref == 'refs/heads/master'
       run: dotnet nuget push ./nuget/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
