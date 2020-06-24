@@ -7,7 +7,7 @@
           <Format>lcov</Format>
           <ExcludeByFile>**/GitVersionInformation.g.cs</ExcludeByFile>
           <IncludeTestAssembly>false</IncludeTestAssembly>
-          <UseSourceLink>true</UseSourceLink>
+          <UseSourceLink>false</UseSourceLink>
         </Configuration>
       </DataCollector>
     </DataCollectors>
