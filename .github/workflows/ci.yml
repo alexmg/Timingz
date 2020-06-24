@@ -43,6 +43,9 @@ jobs:
     - name: Move test coverage results
       run: mv ./coverage/**/*.info ./coverage
 
+    - name: Dump coverage results
+      run: cat ./coverage/coverage.info
+
     - name: Pack
       run: dotnet pack ./src/Timingz --output ./nuget /p:NoPackageAnalysis=true
 
