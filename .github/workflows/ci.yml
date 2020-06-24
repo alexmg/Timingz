@@ -58,6 +58,11 @@ jobs:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate
 
+    - name: Publish coverage report to coveralls.io
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Publish to NuGet.org
       if: ${{ success() && github.ref == 'refs/heads/master' }}
       run: dotnet nuget push ./nuget/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
