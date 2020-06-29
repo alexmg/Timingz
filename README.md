@@ -183,6 +183,16 @@ Server-Timing for http://localhost:5000/api/sample?timing&desc&custom has 6 metr
 Disposing callback
 ```
 
+## Postman Visualizer
+
+The browser developer tools have a built-in visualization for metrics in the `Server-Timing` header but often API requests are tested in a tool such as Postman. The sample folder contains a Postman collection with a visualizer that allows metrics to be visualized in a horizontal bar chart similar to that found in the browser developer tools.
+
+Click the `Visualize` button when viewing the response body in Postman to see the chart. The visualizer is applied at the collection level and will work with all requests in that collection. You can override the collection level visualizer for a specific request using the `pm.visualizer.set` method.
+
+The visualizer will display a message when the response does not contain a `Server-Timing` header or no values are present in the header. Metrics that have a name but no duration are listed at the top of the visualization to provide context for the values in the chart.
+
+![alt Postman Visualizer](assets/Postman-visualizer.png)
+
 ## Credits
 
 Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/)

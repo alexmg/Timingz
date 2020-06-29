@@ -1,0 +1,511 @@
+{
+	"info": {
+		"_postman_id": "75794489-9288-40a3-8323-94a5fe2d772a",
+		"name": "Server-Timing Visualizer",
+		"description": "Visualize metric values from the `Server-Timing` response header in a horizontal bar chart. This brings to Postman a visualization similar to the chart shown in the developer tools of modern browsers.\r\n\r\nIf you would like to add [Server Timing](https://www.w3.org/TR/server-timing/) support to your ASP.NET Core application please consider the [Timingz](https://github.com/alexmg/Timingz) project on GitHub.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Custom metrics with description",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=db;dur=74.4499;desc=\"Database queries\",miss;desc=\"Cache miss\",cache;dur=45.3295;desc=\"Cache writes\",total;dur=191.1103;desc=\"Total\",external;dur=30;desc=\"External metric timing\",bus;dur=15.5627;desc=\"Send notification to bus\"",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"response-headers"
+					],
+					"query": [
+						{
+							"key": "Server-Timing",
+							"value": "db;dur=74.4499;desc=\"Database queries\",miss;desc=\"Cache miss\",cache;dur=45.3295;desc=\"Cache writes\",total;dur=191.1103;desc=\"Total\",external;dur=30;desc=\"External metric timing\",bus;dur=15.5627;desc=\"Send notification to bus\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Custom metrics without descriptions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=db;dur=74.4499;desc=\"Database queries\",miss;desc=\"Cache miss\",cache;dur=45.3295;desc=\"Cache writes\",total;dur=191.1103;desc=\"Total\",external;dur=30;desc=\"External metric timing\",bus;dur=15.5627;desc=\"Send notification to bus\"",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"response-headers"
+					],
+					"query": [
+						{
+							"key": "Server-Timing",
+							"value": "db;dur=74.4499;desc=\"Database queries\",miss;desc=\"Cache miss\",cache;dur=45.3295;desc=\"Cache writes\",total;dur=191.1103;desc=\"Total\",external;dur=30;desc=\"External metric timing\",bus;dur=15.5627;desc=\"Send notification to bus\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Total metric only",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=total;dur=191.1103;desc=\"Total\"",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"response-headers"
+					],
+					"query": [
+						{
+							"key": "Server-Timing",
+							"value": "total;dur=191.1103;desc=\"Total\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Name only metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=total;dur=191.1103;desc=\"Total\"",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"response-headers"
+					],
+					"query": [
+						{
+							"key": "Server-Timing",
+							"value": "total;dur=191.1103;desc=\"Total\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "No header values",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"response-headers"
+					],
+					"query": [
+						{
+							"key": "Server-Timing",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Timingz Web API Sample",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3c63f42f-21cd-43e9-8284-e6a8bc967d2d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/sample?timing&desc&custom",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"sample"
+					],
+					"query": [
+						{
+							"key": "timing",
+							"value": null
+						},
+						{
+							"key": "desc",
+							"value": null
+						},
+						{
+							"key": "custom",
+							"value": null
+						}
+					]
+				},
+				"description": "This request is for testing the Web API sample from the [Timingz](https://github.com/alexmg/Timingz) project on GitHub."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "dc5b922e-c42a-4248-93e0-91475213e7e5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "871c81b4-33fc-4c9f-81a4-0f4acd452977",
+				"type": "text/javascript",
+				"exec": [
+					"// ServerTiming class taken from ChromeDevTools and modified to work in Postman.",
+					"// https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/sdk/ServerTiming.js",
+					"// https://github.com/ChromeDevTools/devtools-frontend/blob/master/LICENSE",
+					"",
+					"class ServerTiming {",
+					"  constructor(metric, value, description) {",
+					"    this.metric = metric;",
+					"    this.value = value;",
+					"    this.description = description;",
+					"  }",
+					"",
+					"  static parseHeaders(headers) {",
+					"    const rawServerTimingHeaders = headers.filter(item => item.key.toLowerCase() === 'server-timing');",
+					"    if (!rawServerTimingHeaders.length) {",
+					"      return null;",
+					"    }",
+					"",
+					"    const serverTimings = rawServerTimingHeaders.reduce((memo, header) => {",
+					"      const timing = this.createFromHeaderValue(header.value);",
+					"      memo.push(...timing.map(function(entry) {",
+					"        return new ServerTiming(",
+					"            entry.name, entry.hasOwnProperty('dur') ? entry.dur : null, entry.hasOwnProperty('desc') ? entry.desc : '');",
+					"      }));",
+					"      return memo;",
+					"    }, ([]));",
+					"    serverTimings.sort((a, b) => {",
+					"        if (a.value > b.value) return -1;",
+					"        if (a.value < b.value) return 1;",
+					"        return 0;",
+					"    });",
+					"",
+					"    return serverTimings;",
+					"  }",
+					"",
+					"  static createFromHeaderValue(valueString) {",
+					"    function trimLeadingWhiteSpace() {",
+					"      valueString = valueString.replace(/^\\s*/, '');",
+					"    }",
+					"    function consumeDelimiter(char) {",
+					"      trimLeadingWhiteSpace();",
+					"      if (valueString.charAt(0) !== char) {",
+					"        return false;",
+					"      }",
+					"",
+					"      valueString = valueString.substring(1);",
+					"      return true;",
+					"    }",
+					"    function consumeToken() {",
+					"      // https://tools.ietf.org/html/rfc7230#appendix-B",
+					"      const result = /^(?:\\s*)([\\w!#$%&'*+\\-.^`|~]+)(?:\\s*)(.*)/.exec(valueString);",
+					"      if (!result) {",
+					"        return null;",
+					"      }",
+					"",
+					"      valueString = result[2];",
+					"      return result[1];",
+					"    }",
+					"    function consumeTokenOrQuotedString() {",
+					"      trimLeadingWhiteSpace();",
+					"      if (valueString.charAt(0) === '\"') {",
+					"        return consumeQuotedString();",
+					"      }",
+					"",
+					"      return consumeToken();",
+					"    }",
+					"    function consumeQuotedString() {",
+					"      valueString = valueString.substring(1);  // remove leading DQUOTE",
+					"",
+					"      let value = '';",
+					"      while (valueString.length) {",
+					"        // split into two parts:",
+					"        //  -everything before the first \" or \\",
+					"        //  -everything else",
+					"        const result = /^([^\"\\\\]*)(.*)/.exec(valueString);",
+					"        if (!result) {",
+					"          return null;  // not a valid quoted-string",
+					"        }",
+					"        value += result[1];",
+					"        if (result[2].charAt(0) === '\"') {",
+					"          // we have found our closing \"",
+					"          valueString = result[2].substring(1);  // strip off everything after the closing \"",
+					"          return value;                          // we are done here",
+					"        }",
+					"",
+					"        console.assert(result[2].charAt(0) === '\\\\');",
+					"        // special rules for \\ found in quoted-string (https://tools.ietf.org/html/rfc7230#section-3.2.6)",
+					"        value += result[2].charAt(1);          // grab the character AFTER the \\ (if there was one)",
+					"        valueString = result[2].substring(2);  // strip off \\ and next character",
+					"      }",
+					"",
+					"      return null;  // not a valid quoted-string",
+					"    }",
+					"    function consumeExtraneous() {",
+					"      const result = /([,;].*)/.exec(valueString);",
+					"      if (result) {",
+					"        valueString = result[1];",
+					"      }",
+					"    }",
+					"",
+					"    const result = [];",
+					"    let name;",
+					"    while ((name = consumeToken()) !== null) {",
+					"      const entry = {name};",
+					"",
+					"      if (valueString.charAt(0) === '=') {",
+					"        this.showWarning(`Deprecated syntax found. Please use: <name>;dur=<duration>;desc=<description>`);",
+					"      }",
+					"",
+					"      while (consumeDelimiter(';')) {",
+					"        let paramName;",
+					"        if ((paramName = consumeToken()) === null) {",
+					"          continue;",
+					"        }",
+					"",
+					"        paramName = paramName.toLowerCase();",
+					"        const parseParameter = this.getParserForParameter(paramName);",
+					"        let paramValue = null;",
+					"        if (consumeDelimiter('=')) {",
+					"          // always parse the value, even if we don't recognize the parameter name",
+					"          paramValue = consumeTokenOrQuotedString();",
+					"          consumeExtraneous();",
+					"        }",
+					"",
+					"        if (parseParameter) {",
+					"          // paramName is valid",
+					"          if (entry.hasOwnProperty(paramName)) {",
+					"            this.showWarning(ls`Duplicate parameter \"${paramName}\" ignored.`);",
+					"            continue;",
+					"          }",
+					"",
+					"          if (paramValue === null) {",
+					"            this.showWarning(ls`No value found for parameter \"${paramName}\".`);",
+					"          }",
+					"",
+					"          parseParameter.call(this, entry, paramValue);",
+					"        } else {",
+					"          // paramName is not valid",
+					"          this.showWarning(ls`Unrecognized parameter \"${paramName}\".`);",
+					"        }",
+					"      }",
+					"",
+					"      result.push(entry);",
+					"      if (!consumeDelimiter(',')) {",
+					"        break;",
+					"      }",
+					"    }",
+					"",
+					"    if (valueString.length) {",
+					"      this.showWarning(ls`Extraneous trailing characters.`);",
+					"    }",
+					"    return result;",
+					"  }",
+					"",
+					"  static getParserForParameter(paramName) {",
+					"    switch (paramName) {",
+					"      case 'dur': {",
+					"        function durParser(entry, paramValue) {",
+					"          entry.dur = 0;",
+					"          if (paramValue !== null) {",
+					"            const duration = parseFloat(paramValue);",
+					"            if (isNaN(duration)) {",
+					"              ServerTiming.showWarning(ls`Unable to parse \"${paramName}\" value \"${paramValue}\".`);",
+					"              return;",
+					"            }",
+					"            entry.dur = duration;",
+					"          }",
+					"        }",
+					"        return durParser;",
+					"      }",
+					"",
+					"      case 'desc': {",
+					"        function descParser(entry, paramValue) {",
+					"          entry.desc = paramValue || '';",
+					"        }",
+					"        return descParser;",
+					"      }",
+					"",
+					"      default: {",
+					"        return null;",
+					"      }",
+					"    }",
+					"  }",
+					"",
+					"  static showWarning(msg) {",
+					"    console.warn(`ServerTiming: ${msg}`);",
+					"  }",
+					"}",
+					"",
+					"// The MIT License (MIT)",
+					"// Copyright (c) Alex Meyer-Gleaves",
+					"// https://github.com/alexmg/Timingz/blob/develop/LICENSE",
+					"",
+					"let metrics = ServerTiming.parseHeaders(pm.response.headers);",
+					"if (!metrics) {",
+					"  metrics = [];",
+					"}",
+					"",
+					"let tags = metrics.filter(p => !p.value).flatMap(p => p.description || p.metric).join(\", \");",
+					"",
+					"metrics = metrics.filter(p => p.value);",
+					"if (metrics.length > 1) {",
+					"    metrics = metrics.filter(p => p.metric !== \"total\");",
+					"}",
+					"",
+					"metrics.sort((a, b) => {",
+					"    if (a.value > b.value) return -1;",
+					"    if (a.value < b.value) return 1;",
+					"    return 0;",
+					"});",
+					"",
+					"const chartData = {",
+					"    empty: metrics.length === 0 && !tags,",
+					"    hasData: metrics.length > 0,",
+					"    labels: metrics.flatMap(p => p.description || p.metric),",
+					"    data: metrics.flatMap(p => p.value),",
+					"    tags: tags",
+					"};",
+					"",
+					"let template = `",
+					"<link href=\"https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap\" rel=\"stylesheet\">",
+					"",
+					"<style>",
+					"body {",
+					"    font-family: 'Roboto Condensed', sans-serif;",
+					"}",
+					"",
+					".info {",
+					"  text-align: center;",
+					"  padding-bottom: 10px;",
+					"  font-size: 18",
+					"}",
+					"</style>",
+					"",
+					"<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js\"></script>",
+					"",
+					"{{#if empty}}",
+					"    <div class=\"info\">No Server-Timing header values found</div>",
+					"{{else}}",
+					"    {{#if tags}}",
+					"        <div class=\"info\">Name only metrics: {{tags}}</div>",
+					"    {{/if}}",
+					"    {{#if hasData}}",
+					"      <canvas id=\"myChart\"></canvas>",
+					"    {{/if}}",
+					"{{/if}}",
+					"",
+					"<script>",
+					"    let ctx = document.getElementById(\"myChart\");",
+					"",
+					"    const font = \"'Roboto Condensed', sans-serif\";",
+					"    Chart.defaults.global.defaultFontFamily = font;",
+					"",
+					"    let myChart = new Chart(ctx, {",
+					"        type: \"horizontalBar\",",
+					"        data: {",
+					"            labels: [],",
+					"            datasets: [{",
+					"                data: [],",
+					"                backgroundColor: [",
+					"                    '#7ed6df', '#e056fd', '#686de0', '#30336b', '#95afc0',",
+					"                    '#22a6b3', '#be2edd', '#4834d4', '#130f40', '#535c68',",
+					"                    '#f6e58d', '#ffbe76', '#ff7979', '#badc58', '#dff9fb',",
+					"                    '#f9ca24', '#f0932b', '#eb4d4b', '#6ab04c', '#c7ecee'",
+					"                ]",
+					"            }]",
+					"        },",
+					"        options: {",
+					"            legend: { display: false },",
+					"            title: {",
+					"                display: true,",
+					"                text: 'Server-Timing Header Metrics',",
+					"                fontSize: 20",
+					"            },",
+					"            scales: {",
+					"                xAxes: [{",
+					"                    display: true,",
+					"                    scaleLabel: {",
+					"                        display: true,",
+					"                        labelString: 'Duration',",
+					"                        fontSize: 16",
+					"                    },",
+					"                    ticks: {",
+					"                        beginAtZero: true",
+					"                    }",
+					"                }],",
+					"                yAxes: [{",
+					"                    display: true,",
+					"                    scaleLabel: {",
+					"                        display: true,",
+					"                        labelString: 'Metric',",
+					"                        fontSize: 16",
+					"                    }",
+					"                }]",
+					"            }",
+					"        }",
+					"    });",
+					"",
+					"    pm.getData((err, value) => {",
+					"        if (!myChart) return;",
+					"",
+					"        myChart.data.datasets[0].data = value.data;",
+					"        myChart.data.labels = value.labels;",
+					"        myChart.update();",
+					"    });",
+					"</script>`;",
+					"",
+					"pm.visualizer.set(template, chartData);"
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
