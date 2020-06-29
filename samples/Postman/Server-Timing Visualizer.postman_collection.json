@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "75794489-9288-40a3-8323-94a5fe2d772a",
 		"name": "Server-Timing Visualizer",
-		"description": "Visualize metric values from the `Server-Timing` response header in a horizontal bar chart. This brings to Postman a visualization similar to the chart shown in the developer tools of modern browsers.\r\n\r\nIf you would like to add [Server Timing](https://www.w3.org/TR/server-timing/) support to your ASP.NET Core application please consider the [Timingz](https://github.com/alexmg/Timingz) project on GitHub.",
+		"description": "Visualize metric values from the `Server-Timing` response header in a horizontal bar chart. This brings to Postman a visualization similar to the chart shown in the developer tools of modern browsers.\r\n\r\n![Visualizer](https://raw.githubusercontent.com/alexmg/Timingz/develop/assets/Postman-visualizer.png)\r\n\r\nIf you would like to add [Server Timing](https://www.w3.org/TR/server-timing/) support to your ASP.NET Core application please consider the [Timingz](https://github.com/alexmg/Timingz) project on GitHub.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
