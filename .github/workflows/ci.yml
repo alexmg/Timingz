@@ -12,6 +12,8 @@ on:
       - develop
     paths-ignore:
       - 'README.md'
+      - 'assets/**'
+      - 'samples/Postman/**'
 
 jobs:
   build:
