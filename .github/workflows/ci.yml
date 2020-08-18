@@ -59,6 +59,7 @@ jobs:
       run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate
 
     - name: Publish coverage report to coveralls.io
+      if: github.ref == 'refs/heads/master'
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
