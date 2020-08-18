@@ -7,6 +7,8 @@ on:
       - develop
     paths-ignore:
       - 'README.md'
+      - 'assets/**'
+      - 'samples/Postman/**'
   pull_request:
     branches:
       - develop
