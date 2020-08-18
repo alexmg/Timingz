@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "75794489-9288-40a3-8323-94a5fe2d772a",
+		"_postman_id": "b1a63b05-1081-468b-bf3c-c38468badabb",
 		"name": "Server-Timing Visualizer",
 		"description": "Visualize metric values from the `Server-Timing` response header in a horizontal bar chart. This brings to Postman a visualization similar to the chart shown in the developer tools of modern browsers.\r\n\r\n![Visualizer](https://raw.githubusercontent.com/alexmg/Timingz/develop/assets/Postman-visualizer.png)\r\n\r\nIf you would like to add [Server Timing](https://www.w3.org/TR/server-timing/) support to your ASP.NET Core application please consider the [Timingz](https://github.com/alexmg/Timingz) project on GitHub.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -37,7 +37,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://postman-echo.com/response-headers?Server-Timing=db;dur=74.4499;desc=\"Database queries\",miss;desc=\"Cache miss\",cache;dur=45.3295;desc=\"Cache writes\",total;dur=191.1103;desc=\"Total\",external;dur=30;desc=\"External metric timing\",bus;dur=15.5627;desc=\"Send notification to bus\"",
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=db;dur=74.4499,miss,cache;dur=45.3295,total;dur=191.1103,external;dur=30,bus;dur=15.5627",
 					"protocol": "https",
 					"host": [
 						"postman-echo",
@@ -49,7 +49,7 @@
 					"query": [
 						{
 							"key": "Server-Timing",
-							"value": "db;dur=74.4499;desc=\"Database queries\",miss;desc=\"Cache miss\",cache;dur=45.3295;desc=\"Cache writes\",total;dur=191.1103;desc=\"Total\",external;dur=30;desc=\"External metric timing\",bus;dur=15.5627;desc=\"Send notification to bus\""
+							"value": "db;dur=74.4499,miss,cache;dur=45.3295,total;dur=191.1103,external;dur=30,bus;dur=15.5627"
 						}
 					]
 				}
@@ -87,7 +87,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://postman-echo.com/response-headers?Server-Timing=total;dur=191.1103;desc=\"Total\"",
+					"raw": "https://postman-echo.com/response-headers?Server-Timing=miss;desc=\"Cache miss\",dc;desc=\"alt\"",
 					"protocol": "https",
 					"host": [
 						"postman-echo",
@@ -99,7 +99,7 @@
 					"query": [
 						{
 							"key": "Server-Timing",
-							"value": "total;dur=191.1103;desc=\"Total\""
+							"value": "miss;desc=\"Cache miss\",dc;desc=\"alt\""
 						}
 					]
 				}
@@ -133,18 +133,6 @@
 		},
 		{
 			"name": "Timingz Web API Sample",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "3c63f42f-21cd-43e9-8284-e6a8bc967d2d",
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -173,8 +161,7 @@
 							"value": null
 						}
 					]
-				},
-				"description": "This request is for testing the Web API sample from the [Timingz](https://github.com/alexmg/Timingz) project on GitHub."
+				}
 			},
 			"response": []
 		}
@@ -183,7 +170,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "dc5b922e-c42a-4248-93e0-91475213e7e5",
+				"id": "51206af5-f225-4418-9850-df59a2a0a741",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -193,7 +180,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "871c81b4-33fc-4c9f-81a4-0f4acd452977",
+				"id": "818ab1dd-9715-47f2-803e-0668df127eda",
 				"type": "text/javascript",
 				"exec": [
 					"// ServerTiming class taken from ChromeDevTools and modified to work in Postman.",
@@ -393,7 +380,7 @@
 					"  metrics = [];",
 					"}",
 					"",
-					"let tags = metrics.filter(p => !p.value).flatMap(p => p.description || p.metric).join(\", \");",
+					"let tags = metrics.filter(p => !p.value);",
 					"",
 					"metrics = metrics.filter(p => p.value);",
 					"if (metrics.length > 1) {",
@@ -407,7 +394,7 @@
 					"});",
 					"",
 					"const chartData = {",
-					"    empty: metrics.length === 0 && !tags,",
+					"    empty: metrics.length === 0 && tags.length === 0,",
 					"    hasData: metrics.length > 0,",
 					"    labels: metrics.flatMap(p => p.description || p.metric),",
 					"    data: metrics.flatMap(p => p.value),",
@@ -425,7 +412,13 @@
 					".info {",
 					"  text-align: center;",
 					"  padding-bottom: 10px;",
-					"  font-size: 18",
+					"  font-size: 20;",
+					"  font-style: bold;",
+					"  line-height: 1.2;",
+					"}",
+					"",
+					"table {",
+					"  margin: 20px auto;",
 					"}",
 					"</style>",
 					"",
@@ -434,11 +427,28 @@
 					"{{#if empty}}",
 					"    <div class=\"info\">No Server-Timing header values found</div>",
 					"{{else}}",
-					"    {{#if tags}}",
-					"        <div class=\"info\">Name only metrics: {{tags}}</div>",
-					"    {{/if}}",
 					"    {{#if hasData}}",
 					"      <canvas id=\"myChart\"></canvas>",
+					"    {{else}}",
+					"      <div class=\"info\">Server-Timing Header Metrics</div>",
+					"    {{/if}}",
+					"    {{#if tags}}",
+					"        <table>",
+					"          <thead>",
+					"            <tr>",
+					"              <th>Metric</th>",
+					"              <th>Description</th>",
+					"            </tr>",
+					"          </thead>",
+					"          <tbody>",
+					"            {{#each tags}}",
+					"              <tr>",
+					"                <td>{{this.metric}}</td>",
+					"                <td>{{this.description}}</td>",
+					"              </tr>",
+					"            {{/each}}",
+					"          </tbody>",
+					"        </table>",
 					"    {{/if}}",
 					"{{/if}}",
 					"",
