@@ -54,6 +54,7 @@ jobs:
       run: dotnet pack ./src/Timingz -c Release --output ./nuget /p:NoPackageAnalysis=true
 
     - name: Publish to GitHub Packages
+      if: github.ref == 'refs/heads/develop'
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: dotnet nuget push ./nuget/*.nupkg --api-key $NUGET_AUTH_TOKEN --skip-duplicate
