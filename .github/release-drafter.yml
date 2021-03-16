@@ -18,6 +18,8 @@ categories:
   - title: '🧰 Maintenance'
     labels:
       - 'maintenance'
+exclude-labels:
+  - 'skip-changelog'
 version-resolver:
   major:
     labels:
