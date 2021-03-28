@@ -39,7 +39,7 @@ jobs:
       run: dotnet restore
 
     - name: Build solution
-      run: dotnet build -c Release --no-restore /p:GITHUB_ACTIONS=false
+      run: dotnet build -c Release --no-restore
 
     - name: Run unit tests
       run: dotnet test ./test/Timingz.Tests --no-restore -c Release -v normal --settings ./coverlet.runsettings --results-directory ./coverage
