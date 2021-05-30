@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry.Instrumentation.AspNetCore;
+using OpenTelemetry.Trace;
 using Timingz;
 using WebApiSample.Services;
 
@@ -12,6 +14,16 @@ namespace WebApiSample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddOpenTelemetryTracing(builder => builder
+                .AddSource(Telemetry.Source.Name)
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddServerTimingProcessor() // Adds Server Timing support for Activity
+                .AddConsoleExporter());
+
+            services.Configure<AspNetCoreInstrumentationOptions>(options =>
+                options.RecordException = true);
 
             // Add the required services to the dependency injection container.
             // The IServerTiming service is scoped the HTTP request and is available for dependency injection.
