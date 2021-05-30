@@ -17,21 +17,17 @@ namespace Timingz
         {
             if (data.GetCustomProperty(CustomPropertyKey) != null)
             {
-                List<Activity> activities;
-
                 var items = _httpContextAccessor.HttpContext.Items;
 
-                if (items.TryGetValue(ServerTimingMiddleware.ActivitiesItemKey, out var timings))
+                lock (items)
                 {
-                    activities = (List<Activity>)timings;
+                    if (!(items[ServerTimingMiddleware.ActivitiesItemKey] is List<Activity> activities))
+                    {
+                        activities = new List<Activity>();
+                        items[ServerTimingMiddleware.ActivitiesItemKey] = activities;
+                    }
+                    activities.Add(data);
                 }
-                else
-                {
-                    activities = new List<Activity>();
-                    items[ServerTimingMiddleware.ActivitiesItemKey] = activities;
-                }
-
-                activities.Add(data);
             }
 
             base.OnEnd(data);
