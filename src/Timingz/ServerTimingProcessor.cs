@@ -21,7 +21,7 @@ namespace Timingz
 
                 lock (items)
                 {
-                    if (!(items[ServerTimingMiddleware.ActivitiesItemKey] is List<Activity> activities))
+                    if (items[ServerTimingMiddleware.ActivitiesItemKey] is not List<Activity> activities)
                     {
                         activities = new List<Activity>();
                         items[ServerTimingMiddleware.ActivitiesItemKey] = activities;
