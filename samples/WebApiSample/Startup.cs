@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Instrumentation.AspNetCore;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Timingz;
 using WebApiSample.Services;
@@ -10,12 +11,19 @@ using WebApiSample.Services;
 namespace WebApiSample
 {
     public class Startup
-    {
+    {   
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public Startup(IWebHostEnvironment webHostEnvironment) => _webHostEnvironment = webHostEnvironment;
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
             services.AddOpenTelemetryTracing(builder => builder
+                .SetResourceBuilder(ResourceBuilder
+                    .CreateDefault()
+                    .AddService(_webHostEnvironment.ApplicationName))
                 .AddSource(Telemetry.Source.Name)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
