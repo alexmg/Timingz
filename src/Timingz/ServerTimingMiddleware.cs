@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -15,8 +14,6 @@ namespace Timingz
         private readonly ServerTimingOptions _options;
         private readonly ILogger<ServerTimingMiddleware> _logger;
         private readonly HeaderWriter _headerWriter;
-
-        internal const string ActivitiesItemKey = "__Timingz_Activities";
 
         public ServerTimingMiddleware(RequestDelegate next, ServerTimingOptions options, ILogger<ServerTimingMiddleware> logger)
         {
@@ -55,16 +52,6 @@ namespace Timingz
         internal Task OnResponseStarting(HttpContext httpContext, IManualMetric totalMetric, IServerTiming serverTiming, RequestTimingOptions requestOptions)
         {
             totalMetric.Stop();
-
-            if (httpContext.Items.TryGetValue(ActivitiesItemKey, out var timings))
-            {
-                var activities = (List<Activity>)timings;
-                foreach (var activity in activities)
-                {
-                    var description = activity.OperationName != activity.DisplayName ? activity.DisplayName : null;
-                    serverTiming.Precalculated(activity.OperationName, activity.Duration.TotalMilliseconds, description);
-                }
-            }
 
             var metrics = serverTiming.GetMetrics();
 

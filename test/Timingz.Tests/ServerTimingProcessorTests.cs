@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 
@@ -13,8 +12,12 @@ namespace Timingz.Tests
         public void AddsActivityWithCustomPropertyToHttpContextItems()
         {
             var accessor = A.Fake<IHttpContextAccessor>();
-            var context = new DefaultHttpContext();
+            var serverTiming = A.Fake<IServerTiming>();
+            var serviceProvider = A.Fake<IServiceProvider>();
+
+            var context = new DefaultHttpContext {RequestServices = serviceProvider};
             A.CallTo(() => accessor.HttpContext).Returns(context);
+            A.CallTo(() => serviceProvider.GetService(typeof(IServerTiming))).Returns(serverTiming);
 
             var processor = new ServerTimingProcessor(accessor);
 
@@ -24,23 +27,26 @@ namespace Timingz.Tests
             var activity2 = new Activity("Test2").AddServerTiming();
             processor.OnEnd(activity2);
 
-            var activities = context.Items[ServerTimingMiddleware.ActivitiesItemKey].As<List<Activity>>();
-            activities.Should().Contain(new[] {activity1, activity2});
+            A.CallTo(() => serverTiming.Precalculated("Test1", A<double>._, null)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => serverTiming.Precalculated("Test2", A<double>._, null)).MustHaveHappenedOnceExactly();
         }
 
         [Fact]
         public void IgnoresActivityWithoutCustomProperty()
         {
             var accessor = A.Fake<IHttpContextAccessor>();
-            var context = new DefaultHttpContext();
+            var serverTiming = A.Fake<IServerTiming>();
+            var serviceProvider = A.Fake<IServiceProvider>();
+            
+            var context = new DefaultHttpContext {RequestServices = serviceProvider};
             A.CallTo(() => accessor.HttpContext).Returns(context);
+            A.CallTo(() => serviceProvider.GetService(typeof(IServerTiming))).Returns(serverTiming);
 
             var processor = new ServerTimingProcessor(accessor);
             var activity = new Activity("Test");
             processor.OnEnd(activity);
 
-            var activities = context.Items[ServerTimingMiddleware.ActivitiesItemKey].As<List<Activity>>();
-            activities.Should().BeNull();
+            A.CallTo(() => serverTiming.Precalculated("Test", A<double>._, null)).MustNotHaveHappened();
         }
     }
 }
