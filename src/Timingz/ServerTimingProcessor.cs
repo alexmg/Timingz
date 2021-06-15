@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 
 namespace Timingz
@@ -17,17 +17,10 @@ namespace Timingz
         {
             if (data.GetCustomProperty(CustomPropertyKey) != null)
             {
-                var items = _httpContextAccessor.HttpContext.Items;
+                var serverTiming = _httpContextAccessor.HttpContext.RequestServices.GetService<IServerTiming>();
 
-                lock (items)
-                {
-                    if (items[ServerTimingMiddleware.ActivitiesItemKey] is not List<Activity> activities)
-                    {
-                        activities = new List<Activity>();
-                        items[ServerTimingMiddleware.ActivitiesItemKey] = activities;
-                    }
-                    activities.Add(data);
-                }
+                var description = data.OperationName != data.DisplayName ? data.DisplayName : null;
+                serverTiming.Precalculated(data.OperationName, data.Duration.TotalMilliseconds, description);
             }
 
             base.OnEnd(data);

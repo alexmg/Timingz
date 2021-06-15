@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -237,36 +235,6 @@ namespace Timingz.Tests
             logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "B");
         }
 
-        [Fact]
-        public async Task AddsMetricsForActivitiesInHttpContextItems()
-        {
-            using var host = await BuildHost(
-                true,
-                includeCustomMetrics: true,
-                includeDescriptions: true,
-                configureContext: context =>
-                {
-                    var activities = new List<Activity>
-                    {
-                        new Activity("Test1").AddServerTiming(),
-                        new Activity("Test2").AddServerTiming("Test description")
-                    };
-                    context.Items[ServerTimingMiddleware.ActivitiesItemKey] = activities;
-                });
-            var client = host.GetTestClient();
-
-            var response = await client.GetAsync("/");
-
-            var values = ParseTimingHeader(response);
-
-            values.Should().ContainKey("Test1")
-                .WhichValue.Should().ContainKey(DurationParameterName);
-
-            values.Should().ContainKey("Test2")
-                .WhichValue.Should().ContainKey(DescriptionParameterName)
-                .WhichValue.Should().Be("\"Test description\"");
-        }
-
         private Task<IHost> BuildHost(
             bool writerHeader = true,
             bool validateMetrics = false,
@@ -278,8 +246,7 @@ namespace Timingz.Tests
             IEnumerable<string> timingAllowOrigins = null,
             string totalMetricName = ServerTimingOptions.DefaultTotalMetricName,
             string totalMetricDescription = ServerTimingOptions.DefaultTotalDescription,
-            Action<IServerTiming> addTimings = null,
-            Action<HttpContext> configureContext = null) =>
+            Action<IServerTiming> addTimings = null) =>
             new HostBuilder()
                 .ConfigureWebHost(webBuilder => webBuilder
                     .UseTestServer()
@@ -312,7 +279,6 @@ namespace Timingz.Tests
                         })
                         .Use(async (context, next) =>
                         {
-                            configureContext?.Invoke(context);
                             _callbackServices = context.RequestServices.GetServices<IServerTimingCallback>();
                             var serverTiming = context.RequestServices.GetService<IServerTiming>();
                             addTimings?.Invoke(serverTiming);
