@@ -20,13 +20,12 @@ namespace Timingz.Tests
 
         [Theory]
         [MemberData(nameof(AddMetricActions))]
-        public void CannotCreateMetricWithDuplicateName(AddMetricTestCase testCase)
+        public void CanCreateMetricWithDuplicateName(AddMetricTestCase testCase)
         {
             var serverTiming = new ServerTiming();
             serverTiming.Marker(MetricName);
             Action add = () => testCase.AddMetric(serverTiming, MetricName);
-            add.Should().Throw<ArgumentException>()
-                .Which.ParamName.Should().Be("name");
+            add.Should().NotThrow();
         }
 
         [Theory]

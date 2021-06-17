@@ -1,4 +1,6 @@
-﻿namespace Timingz
+﻿using System;
+
+namespace Timingz
 {
     internal class Metric : IMetric
     {
@@ -10,6 +12,9 @@
 
         internal Metric(string name, string description = null)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("The metric name cannot be null or empty.", nameof(name));
+
             Name = name;
             Description = description;
         }
