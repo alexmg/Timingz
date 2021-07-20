@@ -8,22 +8,18 @@ namespace Timingz
     {
         public static TracerProviderBuilder AddServerTimingProcessor(this TracerProviderBuilder builder)
         {
-            switch (builder)
+            return builder switch
             {
-                case null:
-                    throw new ArgumentNullException(nameof(builder));
-                case IDeferredTracerProviderBuilder deferredTracerProviderBuilder:
-                    deferredTracerProviderBuilder.Services.AddHttpContextAccessor();
-                    deferredTracerProviderBuilder.Services.AddSingleton<ServerTimingProcessor>();
-                    return deferredTracerProviderBuilder.Configure((sp, providerBuilder) =>
+                null => throw new ArgumentNullException(nameof(builder)),
+                IDeferredTracerProviderBuilder deferredTracerProviderBuilder => deferredTracerProviderBuilder.Configure(
+                    (sp, providerBuilder) =>
                     {
                         var processor = sp.GetRequiredService<ServerTimingProcessor>();
                         providerBuilder.AddProcessor(processor);
-                    });
-                default:
-                    throw new NotSupportedException(
-                        "The builder must implement IDeferredTracerProviderBuilder for the ServerTiming processor to be added.");
-            }
+                    }),
+                _ => throw new NotSupportedException(
+                    "The builder must implement IDeferredTracerProviderBuilder for the ServerTiming processor to be added.")
+            };
         }
     }
 }
