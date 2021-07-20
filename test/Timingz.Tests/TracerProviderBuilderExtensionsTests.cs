@@ -3,6 +3,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Trace;
 using Xunit;
 
@@ -26,16 +27,27 @@ namespace Timingz.Tests
         }
 
         [Fact]
-        public void AddsServicesToDeferredBuilder()
+        public void AddsProcessorDuringDeferredBuilderCallback()
         {
-            var services = new ServiceCollection();
-            services.AddOpenTelemetryTracing(builder => builder.AddServerTimingProcessor());
-            
-            var provider = services.BuildServiceProvider();
-            
-            provider.GetService<ServerTimingProcessor>().Should().NotBeNull();
-            provider.GetService<IHttpContextAccessor>().Should().NotBeNull();
-            provider.GetService<TracerProvider>().Should().NotBeNull();
+            var httpContextAccessor = A.Fake<IHttpContextAccessor>();
+            var processor = new ServerTimingProcessor(httpContextAccessor);
+            var instanceResolved = false;
+
+            var builder = new HostBuilder()
+                .ConfigureServices(services =>
+                    services.AddSingleton(sp =>
+                        {
+                            instanceResolved = true;
+                            return processor;
+                        })
+                        .AddOpenTelemetryTracing(tracerProviderBuilder =>
+                            tracerProviderBuilder.AddServerTimingProcessor()));
+
+            var host = builder.Build();
+            instanceResolved.Should().BeFalse();
+
+            host.Services.GetService<TracerProvider>().Should().NotBeNull();
+            instanceResolved.Should().BeTrue();
         }
     }
 }
