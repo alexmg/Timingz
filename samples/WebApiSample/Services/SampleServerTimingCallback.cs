@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Extensions;
 using Timingz;
 
 namespace WebApiSample.Services
@@ -9,7 +8,7 @@ namespace WebApiSample.Services
     {
         public async Task OnServerTiming(ServerTimingEvent serverTimingEvent)
         {
-            var displayUrl = serverTimingEvent.HttpContext.Request.GetDisplayUrl();
+            var displayUrl = serverTimingEvent.Context.DisplayUrl;
             var metrics = serverTimingEvent.Metrics;
             await Console.Out.WriteLineAsync($"Server-Timing for {displayUrl} has {metrics.Count} metrics:");
 

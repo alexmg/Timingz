@@ -7,11 +7,11 @@ namespace Timingz
     {
         internal ServerTimingEvent(HttpContext httpContext, IReadOnlyList<IMetric> metrics)
         {
-            HttpContext = httpContext;
+            Context = new ServerTimingEventContext(httpContext);
             Metrics = metrics;
         }
 
-        public HttpContext HttpContext { get; }
+        public ServerTimingEventContext Context { get; }
 
         public IReadOnlyList<IMetric> Metrics { get; }
     }
