@@ -6,7 +6,7 @@ on:
     branches: [ develop, master ]
 
 env:
-  NuGetApiKey: ${{ secrets.NUGET_KEY }}
+  NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
   GitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
