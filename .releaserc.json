@@ -1,0 +1,48 @@
+{
+  "branches": [
+    "master",
+    {
+      "name": "develop",
+      "prerelease": "prerelease"
+    }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github"
+  ],
+  "verifyConditions": [
+    [
+      "@semantic-release/exec",
+      {
+        "verifyConditionsCmd": "test -n \"$NuGetApiKey\" -a \"$GitHubAccessToken\""
+      }
+    ]
+  ],
+  "prepare": [
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./build.sh --no-logo --target Pack --version ${nextRelease.version}"
+      }
+    ]
+  ],
+  "publish": [
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "artifacts/nuget/*.nupkg"
+          }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "./build.sh --no-logo --target Publish"
+      }
+    ]
+  ]
+}

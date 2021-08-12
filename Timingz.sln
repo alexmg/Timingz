@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{3AC265
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		.releaserc.json = .releaserc.json
 		coverlet.runsettings = coverlet.runsettings
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
@@ -27,6 +28,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BB672224-637D-48BE-A30F-EC3F4225CE9F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{554CA797-5F4C-4DE2-8D62-9330570016C8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{A13CA1F6-D610-4B3E-8CA8-6082076CBF27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +53,8 @@ Global
 		{BCEFC198-392E-4F31-90D3-748D59E1704B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCEFC198-392E-4F31-90D3-748D59E1704B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCEFC198-392E-4F31-90D3-748D59E1704B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A13CA1F6-D610-4B3E-8CA8-6082076CBF27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A13CA1F6-D610-4B3E-8CA8-6082076CBF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

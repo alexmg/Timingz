@@ -1,0 +1,65 @@
+name: Continuous Integration
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop, master ]
+
+env:
+  NuGetApiKey: ${{ secrets.NUGET_KEY }}
+  GitHubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get semantic release version
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic_dry
+        with:
+          dry_run: true
+          extra_plugins: |
+            @semantic-release/exec
+    outputs:
+      new_release_published: ${{ steps.semantic_dry.outputs.new_release_published }}
+      new_release_version: ${{ steps.semantic_dry.outputs.new_release_version }}
+
+  test:
+    needs: version
+    if: needs.version.outputs.new_release_published == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Setup .NET Core 5.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: Run unit tests
+      run: ./build.sh --target test --no-logo
+
+  release:
+    needs: [version, test]
+    if: needs.version.outputs.new_release_published == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Semantic release
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        with:
+          extra_plugins: |
+            @semantic-release/exec
