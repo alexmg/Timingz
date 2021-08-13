@@ -20,6 +20,7 @@ Timingz is an ASP.NET Core middleware implementation for recording and communica
   - `Precalculated` metrics can record values captured from an existing timing mechanism
 - Metrics can be validated to highlight logic errors that could lead to invalid and misleading timings being recorded
 - In addition to being sent in the `Server-Timing` header, metrics captured during the request can also be sent to another service or metrics package after the request has been completed
+- Integration with the [.NET Activity API](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/README.md#instrumenting-a-libraryapplication-with-net-activity-api) and [OpenTelemtry .NET](https://github.com/open-telemetry/opentelemetry-dotnet) allows existing `Activity` based metrics to be included in the `Server-Timing` header and exported to OpenTelemetry exporters
 - The `Timing-Allow-Origin` header can be included with configurable domains
 - Durations are measured with the best available platform API using the [Perfolizer (Performance analysis toolkit)](https://github.com/AndreyAkinshin/perfolizer) library
 - Header values are written using the [ZString (Zero Allocation StringBuilder)](https://github.com/Cysharp/ZString) library to minimise memory allocations
@@ -146,6 +147,69 @@ var metrics = serverTiming.GetMetrics();
 foreach (var metric in metrics)
     await Console.Out.WriteLineAsync(
         $"- Name: {metric.Name}, Description: {metric.Description}, Duration: {metric.Duration}");
+```
+
+## Integration with OpenTelemetry .NET and the .NET Activity API
+
+Create a singleton `ActivitySource` that you can reuse throughout your application/library following these [instructions](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/README.md#instrumenting-a-libraryapplication-with-net-activity-api).
+
+```c#
+internal static class Telemetry
+{
+    internal static readonly ActivitySource Source = new("MySource");
+}
+```
+
+When using an `Activity` the `AddServerTiming` extension method can be used to include the duration in the `Server-Timing` header.
+
+```c#
+using (Telemetry.Source.StartActivity("Database").AddServerTiming("Queries and caching"))
+{
+    // Perform database operations and cache results
+}
+```
+
+The metric name in the `Server-Timing` header will be the `Name` of the `Activity`. You can provide a description for the metric in the header by passing a value for the optional `description` parameter on the `AddServerTiming` extension method.
+
+In the example above the resulting metric in the `Server-Timing` header would be named *Database* and have a `desc` of *Queries and caching*.
+
+```
+Database;dur=94.4693;desc="Queries and caching"
+```
+
+The services required for the OpenTelemetry .NET integration are added when calling `AddServerTiming` on the `IServiceCollection`. This call is still required even when not using the `IServerTiming` service directly.
+
+```c#
+services.AddServerTiming();
+```
+
+When configuring the `TraceProviderBuilder` for OpenTelemetry .NET call the `AddServerTimingProcessor` extension method to add an OpenTelemetry processor implementation that will extract preclculated metrics for any `Activity` that was used with the `AddServerTiming` extension method.
+
+```c#
+services.AddOpenTelemetryTracing(builder => builder
+    .SetResourceBuilder(ResourceBuilder
+        .CreateDefault()
+        .AddService(_webHostEnvironment.ApplicationName))
+    .AddSource(Telemetry.Source.Name)
+    .AddAspNetCoreInstrumentation()
+    .AddHttpClientInstrumentation()
+    .AddServerTimingProcessor() // Adds Server Timing support for Activity
+    .AddConsoleExporter());
+```
+
+With the console exporter added in the `AddOpenTelemetryTracing` configuration like above, logging output similar to that shown below will be written to the console. The metrics used with the `AddServerTiming` extension method are included in both the `Server-Timing` header and OpenTelemetry .NET exporters.
+
+```
+Activity.Id:          00-05b72f2171669d47b4e926b83f4aee41-8971731c6d98a94d-01
+Activity.ParentId:    00-05b72f2171669d47b4e926b83f4aee41-4cd9af21ee6a8e4a-01
+Activity.ActivitySourceName: WebApiSample
+Activity.DisplayName: Queries and caching
+Activity.Kind:        Internal
+Activity.StartTime:   2021-08-13T04:49:07.5185626Z
+Activity.Duration:    00:00:00.1105973
+Resource associated with Activity:
+    service.name: WebApiSample
+    service.instance.id: 58d8003a-c22d-4ceb-a7bc-b5c8802323f2
 ```
 
 ## Implementing an `IServerTimingCallback` service
