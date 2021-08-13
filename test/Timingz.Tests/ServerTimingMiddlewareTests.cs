@@ -131,8 +131,8 @@ namespace Timingz.Tests
 
             var values = ParseTimingHeader(response);
             values.Should().ContainKey(CustomMetricName)
-                .WhichValue.Should().ContainKey(DescriptionParameterName)
-                .WhichValue.Should().Be($"\"{CustomMetricDescription}\"");
+                .WhoseValue.Should().ContainKey(DescriptionParameterName)
+                .WhoseValue.Should().Be($"\"{CustomMetricDescription}\"");
         }
 
         [Theory]
@@ -151,11 +151,11 @@ namespace Timingz.Tests
             var values = ParseTimingHeader(response);
 
             values.Should().ContainKey(CustomMetricName)
-                .WhichValue.Should().ContainKey(DurationParameterName);
+                .WhoseValue.Should().ContainKey(DurationParameterName);
 
             values.Should().ContainKey(CustomMetricName)
-                .WhichValue.Should().ContainKey(DescriptionParameterName)
-                .WhichValue.Should().Be($"\"{CustomMetricDescription}\"");
+                .WhoseValue.Should().ContainKey(DescriptionParameterName)
+                .WhoseValue.Should().Be($"\"{CustomMetricDescription}\"");
         }
 
         [Theory]
