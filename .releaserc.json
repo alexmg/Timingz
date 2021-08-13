@@ -6,18 +6,53 @@
       "prerelease": "prerelease"
     }
   ],
+  "analyzeCommits": {
+    "preset": "conventionalcommits",
+    "releaseRules": [
+      {
+        "type": "build",
+        "release": "patch"
+      }
+    ],
+    "parserOpts": {
+      "noteKeywords": [
+        "BREAKING CHANGE",
+        "BREAKING CHANGES"
+      ]
+    }
+  },
+  "generateNotes": {
+    "preset": "conventionalcommits",
+    "presetConfig": {
+      "types": [
+        {
+          "type": "feat",
+          "section": ":sparkles: Features"
+        },
+        {
+          "type": "fix",
+          "section": ":bug: Bug Fixes"
+        },
+        {
+          "type": "perf",
+          "section": ":fast_forward: Performance Improvements"
+        },
+        {
+          "type": "revert",
+          "section": ":bomb: Reverts"
+        },
+        {
+          "type": "build",
+          "section": ":toolbox: Build System"
+        }
+      ]
+    }
+  },
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
     "@semantic-release/github"
-  ],
-  "verifyConditions": [
-    [
-      "@semantic-release/exec",
-      {
-        "verifyConditionsCmd": "test -n \"$NuGetApiKey\" -a \"$GitHubAccessToken\""
-      }
-    ]
   ],
   "prepare": [
     [
@@ -34,6 +69,9 @@
         "assets": [
           {
             "path": "artifacts/nuget/*.nupkg"
+          },
+          {
+            "path": "CHANGELOG.md"
           }
         ]
       }
