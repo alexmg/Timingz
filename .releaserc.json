@@ -54,6 +54,14 @@
     "@semantic-release/changelog",
     "@semantic-release/github"
   ],
+  "verifyConditions": [
+    [
+      "@semantic-release/exec",
+      {
+        "verifyConditionsCmd": "test -n \"$NUGET_API_KEY\" -a \"$GITHUB_TOKEN\""
+      }
+    ]
+  ],
   "prepare": [
     [
       "@semantic-release/exec",
