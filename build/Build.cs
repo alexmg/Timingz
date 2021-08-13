@@ -56,6 +56,8 @@ class Build : NukeBuild
 
     IEnumerable<Project> TestProjects => Solution.GetProjects("*.Tests");
 
+    string GetRepositoryOwner() => GitRepository.Identifier.Split('/').First();
+
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
@@ -124,7 +126,6 @@ class Build : NukeBuild
             .SetProject(Solution)));
 
     Target Publish => _ => _
-        .DependsOn(Pack)
         .Executes(() => { });
 
     Target PublishGitHub => _ => _
@@ -132,7 +133,7 @@ class Build : NukeBuild
         .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKey))
         .TriggeredBy(Publish)
         .Executes(() => DotNetNuGetPush(s => s
-            .SetSource($"https://nuget.pkg.github.com/{GitRepository.Identifier.Split('/').First()}/index.json")
+            .SetSource($"https://nuget.pkg.github.com/{GetRepositoryOwner()}/index.json")
             .SetApiKey(GitHubAccessToken)
             .CombineWith(Glob.Files(NugetDirectory, "*.nupkg"), (ss, package) => ss
                 .SetTargetPath(NugetDirectory / package))));
