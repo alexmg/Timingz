@@ -18,7 +18,7 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
-        "GitHubAccessToken": {
+        "GitHubToken": {
           "type": "string",
           "description": "The access token for making calls to the GitHub API"
         },

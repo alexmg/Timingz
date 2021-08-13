@@ -41,7 +41,7 @@ class Build : NukeBuild
     readonly string NuGetApiKey = string.Empty;
 
     [Parameter("The access token for making calls to the GitHub API")]
-    readonly string GitHubAccessToken = string.Empty;
+    readonly string GitHubToken = string.Empty;
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -130,11 +130,11 @@ class Build : NukeBuild
 
     Target PublishGitHub => _ => _
         .OnlyWhenStatic(() => IsServerBuild)
-        .Requires(() => !string.IsNullOrWhiteSpace(NuGetApiKey))
+        .Requires(() => !string.IsNullOrWhiteSpace(GitHubToken))
         .TriggeredBy(Publish)
         .Executes(() => DotNetNuGetPush(s => s
             .SetSource($"https://nuget.pkg.github.com/{GetRepositoryOwner()}/index.json")
-            .SetApiKey(GitHubAccessToken)
+            .SetApiKey(GitHubToken)
             .CombineWith(Glob.Files(NugetDirectory, "*.nupkg"), (ss, package) => ss
                 .SetTargetPath(NugetDirectory / package))));
 
