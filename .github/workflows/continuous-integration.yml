@@ -26,7 +26,6 @@ jobs:
           dry_run: true
           extra_plugins: |
             @semantic-release/exec
-            @semantic-release/changelog
             conventional-changelog-conventionalcommits
     outputs:
       new_release_published: ${{ steps.semantic_dry.outputs.new_release_published }}
@@ -67,5 +66,4 @@ jobs:
           semantic_version: 17.4.4
           extra_plugins: |
             @semantic-release/exec
-            @semantic-release/changelog
             conventional-changelog-conventionalcommits
