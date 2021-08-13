@@ -33,7 +33,6 @@ jobs:
 
   test:
     needs: version
-    if: needs.version.outputs.new_release_published == 'true'
     runs-on: ubuntu-latest
 
     steps:
