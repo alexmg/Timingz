@@ -123,7 +123,8 @@ class Build : NukeBuild
             .SetConfiguration(Configuration.Release)
             .SetVersion(Version)
             .SetOutputDirectory(NugetDirectory)
-            .SetProject(Solution)));
+            .CombineWith(Glob.Files(SourceDirectory, "**/*.csproj"), (ss, project) => ss
+                .SetProject(SourceDirectory / project))));
 
     Target Publish => _ => _
         .Executes(() => { });
