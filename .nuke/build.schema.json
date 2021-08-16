@@ -87,7 +87,8 @@
               "PublishGitHub",
               "PublishNuGet",
               "Restore",
-              "Test"
+              "Test",
+              "Verify"
             ]
           }
         },
@@ -109,7 +110,8 @@
               "PublishGitHub",
               "PublishNuGet",
               "Restore",
-              "Test"
+              "Test",
+              "Verify"
             ]
           }
         },

@@ -12,6 +12,7 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.ReportGenerator;
+using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.FileSystemTasks;
@@ -57,6 +58,10 @@ class Build : NukeBuild
     IEnumerable<Project> TestProjects => Solution.GetProjects("*.Tests");
 
     string GetRepositoryOwner() => GitRepository.Identifier.Split('/').First();
+
+    Target Verify => _ => _
+        .Requires(() => !NuGetApiKey.IsNullOrEmpty() && !GitHubToken.IsNullOrEmpty())
+        .Executes(() => Logger.Info("Environment variables verified"));
 
     Target Clean => _ => _
         .Before(Restore)
