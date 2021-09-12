@@ -35,6 +35,8 @@ namespace Timingz
 
         public bool ValidateMetrics { get; set; }
 
+        public ActivityMonitoringOptions ActivityMonitoring { get; } = new();
+
         internal Action<HttpContext, RequestTimingOptions> ConfigureRequestTimingOptions { get; private set; } = (_, __) => { };
     }
 }

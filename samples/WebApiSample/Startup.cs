@@ -20,6 +20,8 @@ namespace WebApiSample
         {
             services.AddControllers();
 
+            // Configure OpenTelemetry tracing to see our custom Activity
+            // being exported and included in the Server-Timing header.
             services.AddOpenTelemetryTracing(builder => builder
                 .SetResourceBuilder(ResourceBuilder
                     .CreateDefault()
@@ -27,7 +29,6 @@ namespace WebApiSample
                 .AddSource(Telemetry.Source.Name)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddServerTimingProcessor() // Adds Server Timing support for Activity
                 .AddConsoleExporter());
 
             services.Configure<AspNetCoreInstrumentationOptions>(options =>
@@ -58,6 +59,12 @@ namespace WebApiSample
             // Add the middleware before UseEndpoints.
             app.UseServerTiming(options =>
             {
+                // Enable support for adding Activity durations to the Server-Timing header.
+                options.ActivityMonitoring.Enabled = true;
+                
+                // Add the sources that should be included to avoid listening to all sources. 
+                options.ActivityMonitoring.Sources.Add(Telemetry.Source.Name);
+                
                 // Use the callback below to configure the per-request options. You can use the provided HttpContext to tailor
                 // the options for individual requests or statically define the options and have them apply to all requests.
                 options.WithRequestTimingOptions((httpContext, requestOptions) =>

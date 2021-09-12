@@ -25,8 +25,8 @@ namespace Timingz.Tests
                     && descriptor.ImplementationType == typeof(HttpContextAccessor)
                     && descriptor.Lifetime == ServiceLifetime.Singleton)
                 .And.Contain(descriptor =>
-                    descriptor.ServiceType == typeof(ServerTimingProcessor)
-                    && descriptor.ImplementationType == typeof(ServerTimingProcessor)
+                    descriptor.ServiceType == typeof(ActivityMonitor)
+                    && descriptor.ImplementationType == typeof(ActivityMonitor)
                     && descriptor.Lifetime == ServiceLifetime.Singleton);
         }
 

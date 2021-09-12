@@ -9,7 +9,7 @@ namespace Timingz
             services == null
                 ? throw new ArgumentNullException(nameof(services))
                 : services.AddScoped<IServerTiming, ServerTiming>()
-                    .AddHttpContextAccessor()
-                    .AddSingleton<ServerTimingProcessor>();
+                    .AddSingleton<ActivityMonitor>()
+                    .AddHttpContextAccessor();
     }
 }

@@ -28,7 +28,7 @@ namespace Timingz.Tests
         public void ConstructorThrowsWhenRequestDelegateNull()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            Action ctr = () => new ServerTimingMiddleware(null, new ServerTimingOptions(), null);
+            Action ctr = () => new ServerTimingMiddleware(null, new ServerTimingOptions(), new ActivityMonitor(null), null);
             ctr.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("next");
         }
 
@@ -36,7 +36,7 @@ namespace Timingz.Tests
         public void ConstructorThrowsWhenOptionsNull()
         {
             // ReSharper disable once ObjectCreationAsStatement
-            Action ctr = () => new ServerTimingMiddleware(_ => Task.CompletedTask, null, null);
+            Action ctr = () => new ServerTimingMiddleware(_ => Task.CompletedTask, null, new ActivityMonitor(null), null);
             ctr.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("options");
         }
 

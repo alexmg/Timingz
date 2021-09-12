@@ -70,6 +70,13 @@ namespace Timingz.Tests
             options.InvokeCallbackServices.Should().BeFalse();
         }
 
+        [Fact]
+        public void ActivityMonitoringInitializedToDefaultInstance()
+        {
+            var options = new ServerTimingOptions();
+            options.ActivityMonitoring.Should().NotBeNull();
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]

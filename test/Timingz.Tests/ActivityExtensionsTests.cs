@@ -10,7 +10,7 @@ namespace Timingz.Tests
         public void AddServerTimingSetsCustomProperty()
         {
             var activity = new Activity("Test").AddServerTiming();
-            activity.GetCustomProperty(ServerTimingProcessor.CustomPropertyKey).Should().NotBeNull();
+            activity.GetCustomProperty(ActivityMonitor.CustomPropertyKey).Should().NotBeNull();
         }
 
         [Fact]
