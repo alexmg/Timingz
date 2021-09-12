@@ -81,6 +81,12 @@ app.UseServerTiming(options =>
 
     // Enable/disable the validation of metrics.
     options.ValidateMetrics = env.IsDevelopment();
+    
+    // Enable support for adding Activity durations to the Server-Timing header.
+    options.ActivityMonitoring.Enabled = true;
+            
+    // Add the sources that should be included to avoid listening to all sources. 
+    options.ActivityMonitoring.Sources.Add(Telemetry.Source.Name);
 });
 ```
 
@@ -149,7 +155,7 @@ foreach (var metric in metrics)
         $"- Name: {metric.Name}, Description: {metric.Description}, Duration: {metric.Duration}");
 ```
 
-## Integration with OpenTelemetry .NET and the .NET Activity API
+## Integration the .NET Activity API
 
 Create a singleton `ActivitySource` that you can reuse throughout your application/library following these [instructions](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/README.md#instrumenting-a-libraryapplication-with-net-activity-api).
 
@@ -160,7 +166,14 @@ internal static class Telemetry
 }
 ```
 
-When using an `Activity` the `AddServerTiming` extension method can be used to include the duration in the `Server-Timing` header.
+Add the `ActivitySource` names that should be monitored to the `ActivitySources` on the `ServerTimingOptions`.
+
+```c#
+// Add the Activity Source that should be monitored for AddServerTiming calls. 
+options.ActivitySources.Add(Telemetry.Source.Name);
+```
+
+When using an `Activity` the `AddServerTiming` extension method can be called to include the duration in the `Server-Timing` header.
 
 ```c#
 using (Telemetry.Source.StartActivity("Database").AddServerTiming("Queries and caching"))
@@ -177,39 +190,10 @@ In the example above the resulting metric in the `Server-Timing` header would be
 Database;dur=94.4693;desc="Queries and caching"
 ```
 
-The services required for the OpenTelemetry .NET integration are added when calling `AddServerTiming` on the `IServiceCollection`. This call is still required even when not using the `IServerTiming` service directly.
+The services required for Activity monitoring are added when calling `AddServerTiming` on the `IServiceCollection`. This call is still required even when not using the `IServerTiming` service directly.
 
 ```c#
 services.AddServerTiming();
-```
-
-When configuring the `TraceProviderBuilder` for OpenTelemetry .NET call the `AddServerTimingProcessor` extension method to add an OpenTelemetry processor implementation that will extract preclculated metrics for any `Activity` that was used with the `AddServerTiming` extension method.
-
-```c#
-services.AddOpenTelemetryTracing(builder => builder
-    .SetResourceBuilder(ResourceBuilder
-        .CreateDefault()
-        .AddService(_webHostEnvironment.ApplicationName))
-    .AddSource(Telemetry.Source.Name)
-    .AddAspNetCoreInstrumentation()
-    .AddHttpClientInstrumentation()
-    .AddServerTimingProcessor() // Adds Server Timing support for Activity
-    .AddConsoleExporter());
-```
-
-With the console exporter added in the `AddOpenTelemetryTracing` configuration like above, logging output similar to that shown below will be written to the console. The metrics used with the `AddServerTiming` extension method are included in both the `Server-Timing` header and OpenTelemetry .NET exporters.
-
-```
-Activity.Id:          00-05b72f2171669d47b4e926b83f4aee41-8971731c6d98a94d-01
-Activity.ParentId:    00-05b72f2171669d47b4e926b83f4aee41-4cd9af21ee6a8e4a-01
-Activity.ActivitySourceName: WebApiSample
-Activity.DisplayName: Queries and caching
-Activity.Kind:        Internal
-Activity.StartTime:   2021-08-13T04:49:07.5185626Z
-Activity.Duration:    00:00:00.1105973
-Resource associated with Activity:
-    service.name: WebApiSample
-    service.instance.id: 58d8003a-c22d-4ceb-a7bc-b5c8802323f2
 ```
 
 ## Implementing an `IServerTimingCallback` service
