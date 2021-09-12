@@ -5,11 +5,11 @@ namespace Timingz
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddServerTiming(this IServiceCollection services)
-        {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-
-            return services.AddScoped<IServerTiming, ServerTiming>();
-        }
+        public static IServiceCollection AddServerTiming(this IServiceCollection services) =>
+            services == null
+                ? throw new ArgumentNullException(nameof(services))
+                : services.AddScoped<IServerTiming, ServerTiming>()
+                    .AddSingleton<ActivityMonitor>()
+                    .AddHttpContextAccessor();
     }
 }

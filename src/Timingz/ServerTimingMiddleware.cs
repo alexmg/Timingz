@@ -15,13 +15,17 @@ namespace Timingz
         private readonly ILogger<ServerTimingMiddleware> _logger;
         private readonly HeaderWriter _headerWriter;
 
-        public ServerTimingMiddleware(RequestDelegate next, ServerTimingOptions options, ILogger<ServerTimingMiddleware> logger)
+        public ServerTimingMiddleware(RequestDelegate next,
+            ServerTimingOptions options,
+            ActivityMonitor activityMonitor,
+            ILogger<ServerTimingMiddleware> logger)
         {
             _next = next ?? throw new ArgumentNullException(nameof(next));
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger;
 
             _headerWriter = new HeaderWriter(options.TimingAllowOrigins);
+            activityMonitor.Initialize(options);
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -60,7 +64,7 @@ namespace Timingz
                 for (var i = 0; i < metrics.Count; i++)
                     if (metrics[i] is IValidatableMetric validatableMetric)
                         if (!validatableMetric.Validate(out var message))
-                            _logger.LogWarning(message);
+                            _logger.LogWarning("Metric validation failed with error: {Error}", message);
 
             if (!requestOptions.WriteHeader)
                 return Task.CompletedTask;

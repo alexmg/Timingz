@@ -20,6 +20,7 @@ Timingz is an ASP.NET Core middleware implementation for recording and communica
   - `Precalculated` metrics can record values captured from an existing timing mechanism
 - Metrics can be validated to highlight logic errors that could lead to invalid and misleading timings being recorded
 - In addition to being sent in the `Server-Timing` header, metrics captured during the request can also be sent to another service or metrics package after the request has been completed
+- Integration with the [.NET Activity API](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/README.md#instrumenting-a-libraryapplication-with-net-activity-api) and [OpenTelemtry .NET](https://github.com/open-telemetry/opentelemetry-dotnet) allows existing `Activity` based metrics to be included in the `Server-Timing` header and exported to OpenTelemetry exporters
 - The `Timing-Allow-Origin` header can be included with configurable domains
 - Durations are measured with the best available platform API using the [Perfolizer (Performance analysis toolkit)](https://github.com/AndreyAkinshin/perfolizer) library
 - Header values are written using the [ZString (Zero Allocation StringBuilder)](https://github.com/Cysharp/ZString) library to minimise memory allocations
@@ -146,6 +147,47 @@ var metrics = serverTiming.GetMetrics();
 foreach (var metric in metrics)
     await Console.Out.WriteLineAsync(
         $"- Name: {metric.Name}, Description: {metric.Description}, Duration: {metric.Duration}");
+```
+
+## Integration the .NET Activity API
+
+Create a singleton `ActivitySource` that you can reuse throughout your application/library following these [instructions](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/README.md#instrumenting-a-libraryapplication-with-net-activity-api).
+
+```c#
+internal static class Telemetry
+{
+    internal static readonly ActivitySource Source = new("MySource");
+}
+```
+
+Add the `ActivitySource` names that should be monitored to the `ActivitySources` on the `ServerTimingOptions`.
+
+```c#
+// Add the Activity Source that should be monitored for AddServerTiming calls. 
+options.ActivitySources.Add(Telemetry.Source.Name);
+```
+
+When using an `Activity` the `AddServerTiming` extension method can be called to include the duration in the `Server-Timing` header.
+
+```c#
+using (Telemetry.Source.StartActivity("Database").AddServerTiming("Queries and caching"))
+{
+    // Perform database operations and cache results
+}
+```
+
+The metric name in the `Server-Timing` header will be the `Name` of the `Activity`. You can provide a description for the metric in the header by passing a value for the optional `description` parameter on the `AddServerTiming` extension method.
+
+In the example above the resulting metric in the `Server-Timing` header would be named *Database* and have a `desc` of *Queries and caching*.
+
+```
+Database;dur=94.4693;desc="Queries and caching"
+```
+
+The services required for Activity monitoring are added when calling `AddServerTiming` on the `IServiceCollection`. This call is still required even when not using the `IServerTiming` service directly.
+
+```c#
+services.AddServerTiming();
 ```
 
 ## Implementing an `IServerTimingCallback` service

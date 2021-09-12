@@ -16,6 +16,9 @@ namespace WebApiSample.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+            // This activity measures the duration of the action method and is included as a metric.
+            using var actionActivity = Telemetry.Source.StartActivity("Action").AddServerTiming("GET action method");
+
             // Note that there was a cache miss. This metric does not have a duration and is simply an informational tag.
             _serverTiming.Marker("miss", "Cache miss");
 
@@ -23,25 +26,28 @@ namespace WebApiSample.Controllers
             var databaseMetric = _serverTiming.Manual("db", "Database queries");
             var cacheMetric = _serverTiming.Manual("cache", "Cache writes");
 
-            // Execute first database query.
-            databaseMetric.Start();
-            await Task.Delay(30);
-            databaseMetric.Stop();
+            using (Telemetry.Source.StartActivity("Database").AddServerTiming("Queries and caching"))
+            {
+                // Execute first database query.
+                databaseMetric.Start();
+                await Task.Delay(30);
+                databaseMetric.Stop();
 
-            // Write first result to cache.
-            cacheMetric.Start();
-            await Task.Delay(15);
-            cacheMetric.Stop();
+                // Write first result to cache.
+                cacheMetric.Start();
+                await Task.Delay(15);
+                cacheMetric.Stop();
 
-            // Execute second database query.
-            databaseMetric.Start();
-            await Task.Delay(30);
-            databaseMetric.Stop();
+                // Execute second database query.
+                databaseMetric.Start();
+                await Task.Delay(30);
+                databaseMetric.Stop();
 
-            // Write second result to cache.
-            cacheMetric.Start();
-            await Task.Delay(15);
-            cacheMetric.Stop();
+                // Write second result to cache.
+                cacheMetric.Start();
+                await Task.Delay(15);
+                cacheMetric.Stop();
+            }
 
             // A disposable metric is started immediately and the duration is captured at the point of disposal.
             using (_serverTiming.Disposable("bus", "Send notification to bus"))

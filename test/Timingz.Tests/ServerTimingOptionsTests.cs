@@ -70,6 +70,13 @@ namespace Timingz.Tests
             options.InvokeCallbackServices.Should().BeFalse();
         }
 
+        [Fact]
+        public void ActivitySourcesInitializedToEmpty()
+        {
+            var options = new ServerTimingOptions();
+            options.ActivitySources.Should().BeEmpty();
+        }
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -8,16 +9,25 @@ namespace Timingz.Tests
     public class ServiceCollectionExtensionsTests
     {
         [Fact]
-        public void AddServerTimingAddsServiceToCollection()
+        public void AddServerTimingAddsServicesToCollection()
         {
             var services = new ServiceCollection();
 
             services.AddServerTiming();
 
-            var descriptor = services[0];
-            descriptor.ServiceType.Should().Be(typeof(IServerTiming));
-            descriptor.ImplementationType.Should().Be(typeof(ServerTiming));
-            descriptor.Lifetime.Should().Be(ServiceLifetime.Scoped);
+            services.Should()
+                .Contain(descriptor =>
+                    descriptor.ServiceType == typeof(IServerTiming)
+                    && descriptor.ImplementationType == typeof(ServerTiming)
+                    && descriptor.Lifetime == ServiceLifetime.Scoped)
+                .And.Contain(descriptor =>
+                    descriptor.ServiceType == typeof(IHttpContextAccessor)
+                    && descriptor.ImplementationType == typeof(HttpContextAccessor)
+                    && descriptor.Lifetime == ServiceLifetime.Singleton)
+                .And.Contain(descriptor =>
+                    descriptor.ServiceType == typeof(ActivityMonitor)
+                    && descriptor.ImplementationType == typeof(ActivityMonitor)
+                    && descriptor.Lifetime == ServiceLifetime.Singleton);
         }
 
         [Fact]

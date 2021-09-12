@@ -2,16 +2,37 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry.Instrumentation.AspNetCore;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Timingz;
 using WebApiSample.Services;
 
 namespace WebApiSample
 {
     public class Startup
-    {
+    {   
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public Startup(IWebHostEnvironment webHostEnvironment) => _webHostEnvironment = webHostEnvironment;
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            // Configure OpenTelemetry tracing to see our custom Activity
+            // being exported and included in the Server-Timing header.
+            services.AddOpenTelemetryTracing(builder => builder
+                .SetResourceBuilder(ResourceBuilder
+                    .CreateDefault()
+                    .AddService(_webHostEnvironment.ApplicationName))
+                .AddSource(Telemetry.Source.Name)
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddConsoleExporter());
+
+            services.Configure<AspNetCoreInstrumentationOptions>(options =>
+                options.RecordException = true);
 
             // Add the required services to the dependency injection container.
             // The IServerTiming service is scoped the HTTP request and is available for dependency injection.
@@ -75,6 +96,9 @@ namespace WebApiSample
                 // You may choose to enable this feature only in a local or development environment.
                 // If the request has a status code of 500 the metrics will not be validated to avoid further exceptions.
                 options.ValidateMetrics = env.IsDevelopment();
+                
+                // Add the Activity Source that should be monitored for AddServerTiming calls.
+                options.ActivitySources.Add(Telemetry.Source.Name);
             });
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());

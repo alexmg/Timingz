@@ -20,7 +20,7 @@ namespace Timingz.PerformanceTests
 
             _serverTimingOptions = new ServerTimingOptions();
             _requestTimingOptions = new RequestTimingOptions {WriteHeader = true};
-            _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, _serverTimingOptions, null);
+            _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, _serverTimingOptions, new ActivityMonitor(null), null);
         }
 
         // ReSharper disable UnassignedField.Global

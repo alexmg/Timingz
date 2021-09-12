@@ -17,7 +17,7 @@ namespace Timingz.PerformanceTests
             _httpContext = new DefaultHttpContext();
             _serverTiming = Factory.CreateServerTiming();
             _callbacks = Factory.CreateCallbacks();
-            _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, new ServerTimingOptions(), null);
+            _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, new ServerTimingOptions(), new ActivityMonitor(null), null);
         }
 
         [Benchmark]
