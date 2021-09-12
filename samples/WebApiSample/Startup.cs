@@ -20,6 +20,16 @@ namespace WebApiSample
         {
             services.AddControllers();
 
+            // Add the required services to the dependency injection container.
+            // The IServerTiming service is scoped the HTTP request and is available for dependency injection.
+            services.AddServerTiming();
+
+            // Callback services can be registered that will be invoked after the request is completed.
+            // These can have a lifetime that is scoped to the request or a singleton.
+            // The event received will contain the HttpContext and a list of metrics that were recorded.
+            // You can use this to send the collected metrics to another service or metrics package.
+            services.AddScoped<IServerTimingCallback, SampleServerTimingCallback>();
+            
             // Configure OpenTelemetry tracing to see our custom Activity
             // being exported and included in the Server-Timing header.
             services.AddOpenTelemetryTracing(builder => builder
@@ -33,16 +43,6 @@ namespace WebApiSample
 
             services.Configure<AspNetCoreInstrumentationOptions>(options =>
                 options.RecordException = true);
-
-            // Add the required services to the dependency injection container.
-            // The IServerTiming service is scoped the HTTP request and is available for dependency injection.
-            services.AddServerTiming();
-
-            // Callback services can be registered that will be invoked after the request is completed.
-            // These can have a lifetime that is scoped to the request or a singleton.
-            // The event received will contain the HttpContext and a list of metrics that were recorded.
-            // You can use this to send the collected metrics to another service or metrics package.
-            services.AddScoped<IServerTimingCallback, SampleServerTimingCallback>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
