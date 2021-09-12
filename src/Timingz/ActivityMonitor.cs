@@ -14,12 +14,12 @@ namespace Timingz
 
         public ActivityMonitor(IHttpContextAccessor httpContextAccessor) => _httpContextAccessor = httpContextAccessor;
 
-        internal void Initialize(ActivityMonitoringOptions options)
+        internal void Initialize(ServerTimingOptions options)
         {
-            if (!options.Enabled || options.Sources.Count == 0) return;
+            if (options.ActivitySources.Count == 0) return;
             
             _listener = new ActivityListener();
-            _listener.ShouldListenTo = source => options.Sources.Contains(source.Name);
+            _listener.ShouldListenTo = source => options.ActivitySources.Contains(source.Name);
             _listener.Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.PropagationData;
             _listener.ActivityStopped = OnActivityStopped;
             ActivitySource.AddActivityListener(_listener);
@@ -29,7 +29,8 @@ namespace Timingz
 
         private void OnActivityStopped(Activity activity)
         {
-            if (activity.GetCustomProperty(CustomPropertyKey) == null) return;
+            if (activity.GetCustomProperty(CustomPropertyKey) == null
+                || _httpContextAccessor.HttpContext.RequestServices == null) return;
                 
             var serverTiming = _httpContextAccessor.HttpContext.RequestServices.GetService<IServerTiming>();
 

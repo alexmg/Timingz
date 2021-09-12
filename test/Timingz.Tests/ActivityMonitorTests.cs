@@ -52,7 +52,7 @@ namespace Timingz.Tests
         }
         
         [Fact]
-        public void DoesNotAddActivityListenerWhenFeatureDisabled()
+        public void DoesNotAddActivityListenerWhenNoSourcesConfigured()
         {
             var serverTiming = A.Fake<IServerTiming>();
             using var monitor = CreateListenerService(serverTiming, false);
@@ -71,8 +71,9 @@ namespace Timingz.Tests
             A.CallTo(() => accessor.HttpContext).Returns(context);
             A.CallTo(() => serviceProvider.GetService(typeof(IServerTiming))).Returns(serverTiming);
 
-            var options = new ActivityMonitoringOptions { Enabled = enabled };
-            options.Sources.Add(Source.Name);
+            var options = new ServerTimingOptions();
+            if (enabled)
+                options.ActivitySources.Add(Source.Name);
             
             var monitor = new ActivityMonitor(accessor);            
             monitor.Initialize(options);

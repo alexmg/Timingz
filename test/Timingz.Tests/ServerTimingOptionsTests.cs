@@ -71,10 +71,10 @@ namespace Timingz.Tests
         }
 
         [Fact]
-        public void ActivityMonitoringInitializedToDefaultInstance()
+        public void ActivitySourcesInitializedToEmpty()
         {
             var options = new ServerTimingOptions();
-            options.ActivityMonitoring.Should().NotBeNull();
+            options.ActivitySources.Should().BeEmpty();
         }
 
         [Theory]

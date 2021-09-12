@@ -59,12 +59,6 @@ namespace WebApiSample
             // Add the middleware before UseEndpoints.
             app.UseServerTiming(options =>
             {
-                // Enable support for adding Activity durations to the Server-Timing header.
-                options.ActivityMonitoring.Enabled = true;
-                
-                // Add the sources that should be included to avoid listening to all sources. 
-                options.ActivityMonitoring.Sources.Add(Telemetry.Source.Name);
-                
                 // Use the callback below to configure the per-request options. You can use the provided HttpContext to tailor
                 // the options for individual requests or statically define the options and have them apply to all requests.
                 options.WithRequestTimingOptions((httpContext, requestOptions) =>
@@ -102,6 +96,9 @@ namespace WebApiSample
                 // You may choose to enable this feature only in a local or development environment.
                 // If the request has a status code of 500 the metrics will not be validated to avoid further exceptions.
                 options.ValidateMetrics = env.IsDevelopment();
+                
+                // Add the Activity Source that should be monitored for AddServerTiming calls.
+                options.ActivitySources.Add(Telemetry.Source.Name);
             });
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());

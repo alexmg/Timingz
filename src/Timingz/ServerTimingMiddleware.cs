@@ -25,7 +25,7 @@ namespace Timingz
             _logger = logger;
 
             _headerWriter = new HeaderWriter(options.TimingAllowOrigins);
-            activityMonitor.Initialize(options.ActivityMonitoring);
+            activityMonitor.Initialize(options);
         }
 
         // ReSharper disable once UnusedMember.Global
