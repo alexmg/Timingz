@@ -81,12 +81,6 @@ app.UseServerTiming(options =>
 
     // Enable/disable the validation of metrics.
     options.ValidateMetrics = env.IsDevelopment();
-    
-    // Enable support for adding Activity durations to the Server-Timing header.
-    options.ActivityMonitoring.Enabled = true;
-            
-    // Add the sources that should be included to avoid listening to all sources. 
-    options.ActivityMonitoring.Sources.Add(Telemetry.Source.Name);
 });
 ```
 
