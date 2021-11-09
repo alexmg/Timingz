@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <LangVersion>latest</LangVersion>
+    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,12 +37,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Perfolizer" Version="0.2.1" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="5.0.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
     <PackageReference Include="ZString" Version="2.4.3" />
   </ItemGroup>
 
