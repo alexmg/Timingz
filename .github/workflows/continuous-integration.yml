@@ -18,6 +18,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup .NET Core 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
       - name: Get semantic release version
         uses: cycjimmy/semantic-release-action@v2
         id: semantic_dry
@@ -57,6 +62,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Setup .NET Core 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v2
