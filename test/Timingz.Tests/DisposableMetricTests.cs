@@ -21,7 +21,7 @@ public class DisposableMetricTests
     public void DisposeCalculatesDuration()
     {
         var metric = new DisposableMetric("foo");
-            
+
         metric.Dispose();
 
         metric.Duration.HasValue.Should().BeTrue();
@@ -31,7 +31,7 @@ public class DisposableMetricTests
     public void ValidateReturnsFalseWhenMetricNotDisposed()
     {
         var metric = new DisposableMetric("foo");
-            
+
         metric.Validate(out var message).Should().BeFalse();
 
         message.Should().Contain("has not been disposed");

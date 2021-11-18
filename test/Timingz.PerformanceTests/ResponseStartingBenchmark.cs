@@ -18,8 +18,9 @@ public class ResponseStartingBenchmark
         _serverTiming = Factory.CreateServerTiming();
 
         _serverTimingOptions = new ServerTimingOptions();
-        _requestTimingOptions = new RequestTimingOptions {WriteHeader = true};
-        _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, _serverTimingOptions, new ActivityMonitor(null), null);
+        _requestTimingOptions = new RequestTimingOptions { WriteHeader = true };
+        _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, _serverTimingOptions,
+            new ActivityMonitor(null), null);
     }
 
     // ReSharper disable UnassignedField.Global

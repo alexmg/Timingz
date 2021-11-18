@@ -25,7 +25,10 @@ internal class ServerTimingMiddleware
     }
 
     // ReSharper disable once UnusedMember.Global
-    public Task Invoke(HttpContext httpContext, IServerTiming serverTiming, IEnumerable<IServerTimingCallback> callbacks)
+    public Task Invoke(
+        HttpContext httpContext,
+        IServerTiming serverTiming,
+        IEnumerable<IServerTimingCallback> callbacks)
     {
         var callbackServices = callbacks as IServerTimingCallback[] ?? callbacks.ToArray();
         var invokeCallbacks = _options.InvokeCallbackServices && callbackServices.Length > 0;
@@ -41,7 +44,8 @@ internal class ServerTimingMiddleware
             _options.TotalMetricDescription);
         totalMetric.Start();
 
-        httpContext.Response.OnStarting(() => OnResponseStarting(httpContext, totalMetric, serverTiming, requestOptions));
+        httpContext.Response.OnStarting(
+            () => OnResponseStarting(httpContext, totalMetric, serverTiming, requestOptions));
 
         if (invokeCallbacks)
             httpContext.Response.OnCompleted(() => OnResponseCompleted(httpContext, serverTiming, callbackServices));
@@ -49,7 +53,11 @@ internal class ServerTimingMiddleware
         return _next(httpContext);
     }
 
-    internal Task OnResponseStarting(HttpContext httpContext, IManualMetric totalMetric, IServerTiming serverTiming, RequestTimingOptions requestOptions)
+    internal Task OnResponseStarting(
+        HttpContext httpContext,
+        IManualMetric totalMetric,
+        IServerTiming serverTiming,
+        RequestTimingOptions requestOptions)
     {
         totalMetric.Stop();
 
@@ -66,14 +74,17 @@ internal class ServerTimingMiddleware
             return Task.CompletedTask;
 
         if (!requestOptions.IncludeCustomMetrics)
-            metrics = new[] {(IMetric)totalMetric};
+            metrics = new[] { (IMetric)totalMetric };
 
         _headerWriter.WriteHeaders(httpContext.Response.Headers, requestOptions.IncludeDescriptions, metrics);
 
         return Task.CompletedTask;
     }
 
-    internal async Task OnResponseCompleted(HttpContext httpContext, IServerTiming serverTiming, IReadOnlyList<IServerTimingCallback> callbacks)
+    internal async Task OnResponseCompleted(
+        HttpContext httpContext,
+        IServerTiming serverTiming,
+        IReadOnlyList<IServerTimingCallback> callbacks)
     {
         var metrics = serverTiming.GetMetrics();
         var timingEvent = new ServerTimingEvent(httpContext, metrics);

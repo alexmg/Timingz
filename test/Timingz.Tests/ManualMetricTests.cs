@@ -50,7 +50,7 @@ public class ManualMetricTests
     {
         var metric = new ManualMetric(Name, Description);
         metric.Start();
-        Action validate = () => metric.Start();
+        var validate = () => metric.Start();
         validate.Should().Throw<InvalidOperationException>()
             .Which.Message.Should().Be("The manual timing has already been started.");
     }
@@ -61,7 +61,7 @@ public class ManualMetricTests
         var metric = new ManualMetric(Name, Description);
         metric.Start();
         metric.Stop();
-        Action validate = () => metric.Stop();
+        var validate = () => metric.Stop();
         validate.Should().Throw<InvalidOperationException>()
             .Which.Message.Should().Be("The manual timing has not been started.");
     }
@@ -70,7 +70,7 @@ public class ManualMetricTests
     public void StopThrowsWhenNotStarted()
     {
         var metric = new ManualMetric(Name, Description);
-        Action validate = () => metric.Stop();
+        var validate = () => metric.Stop();
         validate.Should().Throw<InvalidOperationException>()
             .Which.Message.Should().Be("The manual timing has not been started.");
     }

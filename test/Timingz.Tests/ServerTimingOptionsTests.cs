@@ -18,7 +18,7 @@ public class ServerTimingOptionsTests
         var options = new ServerTimingOptions();
         var httpContext = new DefaultHttpContext();
         var requestOptions = new RequestTimingOptions();
-        Action invoke = () => options.ConfigureRequestTimingOptions(httpContext, requestOptions);
+        var invoke = () => options.ConfigureRequestTimingOptions(httpContext, requestOptions);
         invoke.Should().NotThrow();
     }
 
@@ -26,7 +26,7 @@ public class ServerTimingOptionsTests
     public void WithRequestTimingOptionsThrowsWhenActionNull()
     {
         var options = new ServerTimingOptions();
-        Action invoke = () => options.WithRequestTimingOptions(null);
+        var invoke = () => options.WithRequestTimingOptions(null);
         invoke.Should().Throw<ArgumentNullException>();
     }
 
@@ -35,7 +35,7 @@ public class ServerTimingOptionsTests
     {
         var options = new ServerTimingOptions();
         var called = false;
-        options.WithRequestTimingOptions((_, __) => called = true);
+        options.WithRequestTimingOptions((_, _) => called = true);
         options.ConfigureRequestTimingOptions(null, null);
         called.Should().BeTrue();
     }

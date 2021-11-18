@@ -16,7 +16,7 @@ internal class ActivityMonitor : IDisposable
     internal void Initialize(ServerTimingOptions options)
     {
         if (options.ActivitySources.Count == 0) return;
-            
+
         _listener = new ActivityListener();
         _listener.ShouldListenTo = source => options.ActivitySources.Contains(source.Name);
         _listener.Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.PropagationData;
@@ -30,7 +30,7 @@ internal class ActivityMonitor : IDisposable
     {
         if (activity.GetCustomProperty(CustomPropertyKey) == null
             || _httpContextAccessor.HttpContext.RequestServices == null) return;
-                
+
         var serverTiming = _httpContextAccessor.HttpContext.RequestServices.GetService<IServerTiming>();
 
         var description = activity.OperationName != activity.DisplayName ? activity.DisplayName : null;

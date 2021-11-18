@@ -5,9 +5,9 @@ namespace Timingz;
 public class ServerTimingOptions
 {
     private string _totalMetricName = DefaultTotalMetricName;
-        
+
     internal const string DefaultTotalMetricName = "total";
-        
+
     internal const string DefaultTotalDescription = "Total";
 
     public string TotalMetricName
@@ -34,5 +34,5 @@ public class ServerTimingOptions
 
     public HashSet<string> ActivitySources { get; } = new();
 
-    internal Action<HttpContext, RequestTimingOptions> ConfigureRequestTimingOptions { get; private set; } = (_, __) => { };
+    internal Action<HttpContext, RequestTimingOptions> ConfigureRequestTimingOptions { get; private set; } = (_, _) => { };
 }

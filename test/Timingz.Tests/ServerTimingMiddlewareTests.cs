@@ -97,7 +97,7 @@ public class ServerTimingMiddlewareTests
     public async Task ValidAllowTimingOriginsApplied(string origin)
     {
         var includeOrigins = !string.IsNullOrEmpty(origin);
-        var timingAllowOrigins = includeOrigins ? new List<string> {origin} : null;
+        var timingAllowOrigins = includeOrigins ? new List<string> { origin } : null;
         using var host = await BuildHost(true, timingAllowOrigins: timingAllowOrigins);
         var client = host.GetTestClient();
 
@@ -221,6 +221,7 @@ public class ServerTimingMiddlewareTests
             await Task.Delay(10); // Give the server time to run the OnCompleted handler for the response.
             logMessages = _logger.GetLogMessages();
         }
+
         logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "A");
         logMessages.Should().Contain(m => m.LogLevel == LogLevel.Error && m.Exception.Message == "B");
     }
@@ -248,8 +249,10 @@ public class ServerTimingMiddlewareTests
                     if (registerCallbackServices)
                     {
                         services.AddScoped<IServerTimingCallback, CallbackThatRecordsEvent>()
-                            .AddScoped<IServerTimingCallback>(_ => new CallbackThatThrowsException("A", throwCallbackException))
-                            .AddScoped<IServerTimingCallback>(_ => new CallbackThatThrowsException("B", throwCallbackException));
+                            .AddScoped<IServerTimingCallback>(_ =>
+                                new CallbackThatThrowsException("A", throwCallbackException))
+                            .AddScoped<IServerTimingCallback>(_ =>
+                                new CallbackThatThrowsException("B", throwCallbackException));
                     }
                 })
                 .Configure(app => app
@@ -260,7 +263,7 @@ public class ServerTimingMiddlewareTests
                         options.TimingAllowOrigins = timingAllowOrigins;
                         options.TotalMetricName = totalMetricName;
                         options.TotalMetricDescription = totalMetricDescription;
-                        options.WithRequestTimingOptions((context, timingOptions) =>
+                        options.WithRequestTimingOptions((_, timingOptions) =>
                         {
                             timingOptions.WriteHeader = writerHeader;
                             timingOptions.IncludeDescriptions = includeDescriptions;
@@ -354,7 +357,12 @@ public class ServerTimingMiddlewareTests
 
         public bool IsEnabled(LogLevel logLevel) => true;
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception exception,
+            Func<TState, Exception, string> formatter)
         {
             var message = formatter == null ? state.ToString() : formatter(state, exception);
             var logMessage = new LogMessage(logLevel, message, exception);

@@ -22,7 +22,7 @@ builder.Services.AddScoped<IServerTimingCallback, SampleServerTimingCallback>();
 
 // Configure OpenTelemetry tracing to see our custom Activity
 // being exported and included in the Server-Timing header.
-builder.Services.AddOpenTelemetryTracing(tpb => tpb
+builder.Services.AddOpenTelemetryTracing(tracing => tracing
     .SetResourceBuilder(ResourceBuilder
         .CreateDefault()
         .AddService(builder.Environment.ApplicationName))
@@ -34,7 +34,7 @@ builder.Services.AddOpenTelemetryTracing(tpb => tpb
 builder.Services.Configure<AspNetCoreInstrumentationOptions>(options =>
     options.RecordException = true);
 
-builder.Host.ConfigureLogging(builder => builder.AddOpenTelemetry(options =>
+builder.Host.ConfigureLogging(logging => logging.AddOpenTelemetry(options =>
 {
     options.IncludeScopes = true;
     options.ParseStateValues = true;

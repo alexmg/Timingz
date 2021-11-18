@@ -10,22 +10,31 @@ public class ServerTimingEventTests
     [Fact]
     public void ReadOnlyStateSetFromConstructorParameters()
     {
-        var httpContext = new DefaultHttpContext {TraceIdentifier = "foo"};
-        httpContext.Request.Method = "GET";
-        httpContext.Request.Scheme = "https";
-        httpContext.Request.Host = new HostString("localhost", 8080);
-        httpContext.Request.Path = "/foo/bar";
-        httpContext.Request.QueryString = new QueryString("?foo=bar");
-        httpContext.Request.Protocol = "HTTP/1.1";
-        httpContext.Connection.RemoteIpAddress = IPAddress.Loopback;
-        httpContext.Connection.RemotePort = 80;
+        var httpContext = new DefaultHttpContext
+        {
+            TraceIdentifier = "foo",
+            Request =
+            {
+                Method = "GET",
+                Scheme = "https",
+                Host = new HostString("localhost", 8080),
+                Path = "/foo/bar",
+                QueryString = new QueryString("?foo=bar"),
+                Protocol = "HTTP/1.1"
+            },
+            Connection =
+            {
+                RemoteIpAddress = IPAddress.Loopback,
+                RemotePort = 80
+            }
+        };
         httpContext.Request.Headers.Add("foo", "bar");
         httpContext.Response.StatusCode = 200;
         httpContext.Response.Headers.Add("foo", "bar");
 
         var metric1 = new Metric("foo");
         var metric2 = new Metric("bar");
-        var metrics = new[] {metric1, metric2};
+        var metrics = new[] { metric1, metric2 };
 
         var timingEvent = new ServerTimingEvent(httpContext, metrics);
         var context = timingEvent.Context;

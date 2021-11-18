@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using GlobExpressions;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -26,7 +24,6 @@ class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
-
     public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -113,7 +110,7 @@ class Build : NukeBuild
                 .SetFramework("net5.0")
                 .SetReports(CoverageResultDirectory / "*.xml")
                 .SetTargetDirectory(CoverageReportDirectory)
-                .SetReportTypes((ReportTypes)"lcov")
+                .SetReportTypes("lcov")
                 .When(IsLocalBuild, _ => _
                     .AddReportTypes(ReportTypes.HtmlInline)));
         });

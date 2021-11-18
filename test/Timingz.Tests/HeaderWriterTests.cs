@@ -30,7 +30,7 @@ public class HeaderWriterTests
     {
         const string origin1 = "http://origin1.com/";
         const string origin2 = "http://origin2.com/";
-        var timingAllowOrigins = new[] {origin1, origin2};
+        var timingAllowOrigins = new[] { origin1, origin2 };
         var emptyTimingAllowOrigins = Array.Empty<string>();
 
         const string metric1 = "foo";
@@ -51,7 +51,7 @@ public class HeaderWriterTests
 
         yield return new object[]
         {
-            new[] {new PrecalculatedMetric(metric1, metric1Dur, metric1Desc)},
+            new[] { new PrecalculatedMetric(metric1, metric1Dur, metric1Desc) },
             true,
             emptyTimingAllowOrigins,
             $"{metric1};dur={metric1Dur};desc=\"{metric1Desc}\""
@@ -59,7 +59,7 @@ public class HeaderWriterTests
 
         yield return new object[]
         {
-            new[] {new PrecalculatedMetric(metric1, metric1Dur, metric1Desc)},
+            new[] { new PrecalculatedMetric(metric1, metric1Dur, metric1Desc) },
             false,
             emptyTimingAllowOrigins,
             $"{metric1};dur={metric1Dur}"
@@ -91,7 +91,7 @@ public class HeaderWriterTests
 
         yield return new object[]
         {
-            new[] {new Metric(metric1, metric1Desc)},
+            new[] { new Metric(metric1, metric1Desc) },
             true,
             emptyTimingAllowOrigins,
             $"{metric1};desc=\"{metric1Desc}\""
@@ -99,7 +99,7 @@ public class HeaderWriterTests
 
         yield return new object[]
         {
-            new[] {new Metric(metric1, metric1Desc)},
+            new[] { new Metric(metric1, metric1Desc) },
             false,
             emptyTimingAllowOrigins,
             metric1
@@ -155,7 +155,7 @@ public class HeaderWriterTests
 
         yield return new object[]
         {
-            new[] {new PrecalculatedMetric(metric1, metric1Dur, metric1Desc)},
+            new[] { new PrecalculatedMetric(metric1, metric1Dur, metric1Desc) },
             false,
             timingAllowOrigins,
             $"{metric1};dur={metric1Dur}",

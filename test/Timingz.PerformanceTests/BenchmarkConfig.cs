@@ -9,7 +9,8 @@ internal class BenchmarkConfig : ManualConfig
     {
         Add(DefaultConfig.Instance);
 
-        var rootFolder = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.LastIndexOf("bin", StringComparison.OrdinalIgnoreCase));
+        var baseDirectory = AppContext.BaseDirectory;
+        var rootFolder = baseDirectory[..baseDirectory.LastIndexOf("bin", StringComparison.OrdinalIgnoreCase)];
         var runFolder = DateTime.Now.ToString("u").Replace(' ', '_').Replace(':', '-');
         ArtifactsPath = $"{rootFolder}\\BenchmarkDotNet.Artifacts\\{runFolder}";
 

@@ -16,7 +16,11 @@ public class ResponseCompletedBenchmark
         _httpContext = new DefaultHttpContext();
         _serverTiming = Factory.CreateServerTiming();
         _callbacks = Factory.CreateCallbacks();
-        _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, new ServerTimingOptions(), new ActivityMonitor(null), null);
+        _middleware = new ServerTimingMiddleware(
+            _ => Task.CompletedTask,
+            new ServerTimingOptions(),
+            new ActivityMonitor(null),
+            null);
     }
 
     [Benchmark]

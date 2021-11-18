@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Timingz;
 
+// ReSharper disable ExplicitCallerInfoArgument
+
 namespace WebApiSample.Controllers;
 
 [ApiController]

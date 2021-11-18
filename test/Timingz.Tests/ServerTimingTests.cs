@@ -22,7 +22,7 @@ public class ServerTimingTests
     {
         var serverTiming = new ServerTiming();
         serverTiming.Marker(MetricName);
-        Action add = () => testCase.AddMetric(serverTiming, MetricName);
+        var add = () => testCase.AddMetric(serverTiming, MetricName);
         add.Should().NotThrow();
     }
 
@@ -32,7 +32,7 @@ public class ServerTimingTests
     {
         var serverTiming = new ServerTiming();
         serverTiming.Marker(MetricName);
-        Action add = () => testCase.AddMetric(serverTiming, string.Empty);
+        var add = () => testCase.AddMetric(serverTiming, string.Empty);
         add.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Be("name");
     }
@@ -43,7 +43,7 @@ public class ServerTimingTests
     {
         var serverTiming = new ServerTiming();
         serverTiming.Marker(MetricName);
-        Action add = () => testCase.AddMetric(serverTiming, null);
+        var add = () => testCase.AddMetric(serverTiming, null);
         add.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Be("name");
     }
@@ -54,7 +54,7 @@ public class ServerTimingTests
     {
         var serverTiming = new ServerTiming();
         serverTiming.Marker(MetricName);
-        Action add = () => testCase.AddMetric(serverTiming, " ");
+        var add = () => testCase.AddMetric(serverTiming, " ");
         add.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Be("name");
     }
