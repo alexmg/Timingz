@@ -1,11 +1,10 @@
-﻿namespace Timingz
+﻿namespace Timingz;
+
+public interface IMetric
 {
-    public interface IMetric
-    {
-        string Name { get; }
+    string Name { get; }
 
-        string Description { get; }
+    string Description { get; }
 
-        double? Duration { get; }
-    }
+    double? Duration { get; }
 }

@@ -1,9 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿namespace Timingz;
 
-namespace Timingz
+public interface IServerTimingCallback
 {
-    public interface IServerTimingCallback
-    {
-        Task OnServerTiming(ServerTimingEvent serverTimingEvent);
-    }
+    Task OnServerTiming(ServerTimingEvent serverTimingEvent);
 }

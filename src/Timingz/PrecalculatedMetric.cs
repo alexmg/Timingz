@@ -1,8 +1,7 @@
-﻿namespace Timingz
+﻿namespace Timingz;
+
+internal class PrecalculatedMetric : Metric
 {
-    internal class PrecalculatedMetric : Metric
-    {
-        internal PrecalculatedMetric(string name, double duration, string description = null)
-            : base(name, description) => Duration = duration;
-    }
+    internal PrecalculatedMetric(string name, double duration, string description = null)
+        : base(name, description) => Duration = duration;
 }

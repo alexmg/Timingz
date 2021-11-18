@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 
-namespace WebApiSample
+namespace WebApiSample;
+
+internal static class Telemetry
 {
-    internal static class Telemetry
-    {
-        internal static readonly ActivitySource Source = new("WebApiSample");
-    }
+    internal static readonly ActivitySource Source = new("WebApiSample");
 }

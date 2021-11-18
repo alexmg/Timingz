@@ -1,11 +1,10 @@
-﻿namespace Timingz
+﻿namespace Timingz;
+
+public interface IManualMetric
 {
-    public interface IManualMetric
-    {
-        void Start();
+    void Start();
 
-        void Stop();
+    void Stop();
 
-        bool IsRunning { get; }
-    }
+    bool IsRunning { get; }
 }

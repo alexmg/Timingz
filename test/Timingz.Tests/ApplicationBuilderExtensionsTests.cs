@@ -1,63 +1,59 @@
-﻿using System;
-using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using FluentAssertions;
 using Xunit;
 
-namespace Timingz.Tests
+namespace Timingz.Tests;
+
+public class ApplicationBuilderExtensionsTests
 {
-    public class ApplicationBuilderExtensionsTests
+    [Fact]
+    public void UseServerTimingInvokesConfigurationAction()
     {
-        [Fact]
-        public void UseServerTimingInvokesConfigurationAction()
-        {
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
-            var app = new ApplicationBuilder(serviceProvider);
+        var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var app = new ApplicationBuilder(serviceProvider);
 
-            ServerTimingOptions capturedOptions = null;
-            app.UseServerTiming(options => capturedOptions = options);
+        ServerTimingOptions capturedOptions = null;
+        app.UseServerTiming(options => capturedOptions = options);
 
-            capturedOptions.Should().NotBeNull();
-        }
+        capturedOptions.Should().NotBeNull();
+    }
 
-        [Fact]
-        public void UseServerTimingWithOptionsThrowsWhenAppNull()
-        {
-            var options = new ServerTimingOptions();
-            Action use = () => ApplicationBuilderExtensions.UseServerTiming(null, options);
+    [Fact]
+    public void UseServerTimingWithOptionsThrowsWhenAppNull()
+    {
+        var options = new ServerTimingOptions();
+        Action use = () => ApplicationBuilderExtensions.UseServerTiming(null, options);
 
-            use.Should().Throw<ArgumentNullException>()
-                .Which.ParamName.Should().Be("app");
-        }
+        use.Should().Throw<ArgumentNullException>()
+            .Which.ParamName.Should().Be("app");
+    }
 
-        [Fact]
-        public void UseServerTimingWithOptionsThrowsWhenOptionsNull()
-        {
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
-            var app = new ApplicationBuilder(serviceProvider);
-            Action use = () => app.UseServerTiming(default(ServerTimingOptions));
+    [Fact]
+    public void UseServerTimingWithOptionsThrowsWhenOptionsNull()
+    {
+        var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var app = new ApplicationBuilder(serviceProvider);
+        Action use = () => app.UseServerTiming(default(ServerTimingOptions));
 
-            use.Should().Throw<ArgumentNullException>()
-                .Which.ParamName.Should().Be("options");
-        }
+        use.Should().Throw<ArgumentNullException>()
+            .Which.ParamName.Should().Be("options");
+    }
 
-        [Fact]
-        public void UseServerTimingHandlesNullConfigurationAction()
-        {
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
-            var app = new ApplicationBuilder(serviceProvider);
+    [Fact]
+    public void UseServerTimingHandlesNullConfigurationAction()
+    {
+        var serviceProvider = new ServiceCollection().BuildServiceProvider();
+        var app = new ApplicationBuilder(serviceProvider);
 
-            Action use = () => app.UseServerTiming();
-            use.Should().NotThrow();
-        }
+        Action use = () => app.UseServerTiming();
+        use.Should().NotThrow();
+    }
 
-        [Fact]
-        public void UseServerTimingThrowsWhenAppNull()
-        {
-            Action use = () => ApplicationBuilderExtensions.UseServerTiming(null);
+    [Fact]
+    public void UseServerTimingThrowsWhenAppNull()
+    {
+        Action use = () => ApplicationBuilderExtensions.UseServerTiming(null);
 
-            use.Should().Throw<ArgumentNullException>()
-                .Which.ParamName.Should().Be("app");
-        }
+        use.Should().Throw<ArgumentNullException>()
+            .Which.ParamName.Should().Be("app");
     }
 }

@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace Timingz
+namespace Timingz;
+
+public class ServerTimingEvent
 {
-    public class ServerTimingEvent
+    internal ServerTimingEvent(HttpContext httpContext, IReadOnlyList<IMetric> metrics)
     {
-        internal ServerTimingEvent(HttpContext httpContext, IReadOnlyList<IMetric> metrics)
-        {
-            Context = new ServerTimingEventContext(httpContext);
-            Metrics = metrics;
-        }
-
-        public ServerTimingEventContext Context { get; }
-
-        public IReadOnlyList<IMetric> Metrics { get; }
+        Context = new ServerTimingEventContext(httpContext);
+        Metrics = metrics;
     }
+
+    public ServerTimingEventContext Context { get; }
+
+    public IReadOnlyList<IMetric> Metrics { get; }
 }

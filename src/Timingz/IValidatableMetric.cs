@@ -1,7 +1,6 @@
-﻿namespace Timingz
+﻿namespace Timingz;
+
+internal interface IValidatableMetric
 {
-    internal interface IValidatableMetric
-    {
-        bool Validate(out string message);
-    }
+    bool Validate(out string message);
 }
