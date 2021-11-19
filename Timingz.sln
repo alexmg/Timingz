@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30104.148
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timingz", "src\Timingz\Timingz.csproj", "{EE27EF04-B8D7-4EED-9057-2926D512D609}"
 EndProject
@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{3AC265
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		.releaserc.json = .releaserc.json
+		commitlint.config.js = commitlint.config.js
 		coverlet.runsettings = coverlet.runsettings
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
