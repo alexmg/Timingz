@@ -47,6 +47,11 @@
         },
         {
           "type": "build",
+          "scope": "no-release",
+          "hidden": true
+        },
+        {
+          "type": "build",
           "section": ":toolbox: Build System"
         }
       ]
