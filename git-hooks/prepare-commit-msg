@@ -1,0 +1,17 @@
+#!/bin/sh
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+linter_exit_code=1
+./node_modules/.bin/commitlint -g ./commitlint.config.js -e $COMMIT_MSG_FILE
+linter_exit_code=$?
+
+if [ $linter_exit_code -ne 0 ]
+then
+  echo "🥵 Commit linter errors have been found"
+  exit 1
+else
+  echo "👍 Commit linter did not find any errors"
+  exit 0
+fi

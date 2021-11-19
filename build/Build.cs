@@ -8,6 +8,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Npm;
 using Nuke.Common.Tools.ReportGenerator;
 using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
@@ -52,6 +53,9 @@ class Build : NukeBuild
     IEnumerable<Project> TestProjects => Solution.GetProjects("*.Tests");
 
     string GetRepositoryOwner() => GitRepository.Identifier.Split('/').First();
+
+    Target Prepare => _ => _
+        .Executes(() => IsServerBuild ? NpmTasks.NpmCi() : NpmTasks.NpmInstall());
 
     Target Verify => _ => _
         .Requires(() => !NuGetApiKey.IsNullOrEmpty() && !GitHubToken.IsNullOrEmpty())
