@@ -4,7 +4,7 @@ module.exports = {
     rules: {
         "type-enum":
             [2, "always", [
-                "revert", "feat", "fix", "perf", "docs", "test", "build", "refactor", "style", "chore"
+                "revert", "feat", "fix", "perf", "docs", "test", "build", "ci", "refactor", "style", "chore"
             ]],
 
         // Default rules we want to suppress:
