@@ -1,9 +1,17 @@
 {
   "scripts": {
-    "postinstall": "git config core.hooksPath ./git-hooks"
+    "postinstall": "git config core.hooksPath ./git-hooks",
+    "commit": "git-cz"
   },
   "devDependencies": {
     "@commitlint/cli": "14.1.0",
-    "@commitlint/config-conventional": "14.1.0"
+    "@commitlint/config-conventional": "14.1.0",
+    "@commitlint/cz-commitlint": "^15.0.0",
+    "commitizen": "^4.2.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   }
 }
