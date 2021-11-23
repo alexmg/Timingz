@@ -58,8 +58,8 @@ class Build : NukeBuild
         .Executes(() => IsServerBuild ? NpmTasks.NpmCi() : NpmTasks.NpmInstall());
 
     Target Verify => _ => _
-        .Requires(() => !NuGetApiKey.IsNullOrEmpty() && !GitHubToken.IsNullOrEmpty())
-        .Executes(() => Logger.Info("Environment variables verified"));
+        .Requires(() => IsLocalBuild || (!NuGetApiKey.IsNullOrEmpty() && !GitHubToken.IsNullOrEmpty()))
+        .Executes(() => Logger.Info(IsLocalBuild ? "Verify skipped for local build" : "Environment variables verified"));
 
     Target Clean => _ => _
         .Before(Restore)

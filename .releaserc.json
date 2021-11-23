@@ -66,7 +66,7 @@
     [
       "@semantic-release/exec",
       {
-        "verifyConditionsCmd": "./build.sh --no-logo --target Verify"
+        "verifyConditionsCmd": "pwsh -NoProfile ./build.ps1 --no-logo --target Verify"
       }
     ]
   ],
@@ -74,7 +74,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "./build.sh --no-logo --target Pack --version ${nextRelease.version}"
+        "prepareCmd": "pwsh -NoProfile ./build.ps1 --no-logo --target Pack --version ${nextRelease.version}"
       }
     ]
   ],
@@ -92,7 +92,7 @@
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "./build.sh --no-logo --target Publish"
+        "publishCmd": "pwsh -NoProfile ./build.ps1 --no-logo --target Publish"
       }
     ]
   ]
