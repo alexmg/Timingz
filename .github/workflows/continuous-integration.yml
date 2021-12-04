@@ -26,15 +26,21 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
+      # https://github.com/cycjimmy/semantic-release-action/issues/79
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Get semantic release version
-        uses: cycjimmy/semantic-release-action@v2
+        uses: cycjimmy/semantic-release-action@v2.6.0
         id: semantic_dry
         with:
-          semantic_version: 17.4.4
+          semantic_version: 18.0.1
           dry_run: true
           extra_plugins: |
-            @semantic-release/exec
-            conventional-changelog-conventionalcommits
+            @semantic-release/exec@6.0.2
+            conventional-changelog-conventionalcommits@4.6.1
     outputs:
       new_release_published: ${{ steps.semantic_dry.outputs.new_release_published }}
       new_release_version: ${{ steps.semantic_dry.outputs.new_release_version }}
@@ -71,11 +77,17 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
+      # https://github.com/cycjimmy/semantic-release-action/issues/79
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Semantic release
-        uses: cycjimmy/semantic-release-action@v2
+        uses: cycjimmy/semantic-release-action@v2.6.0
         id: semantic
         with:
-          semantic_version: 17.4.4
+          semantic_version: 18.0.1
           extra_plugins: |
-            @semantic-release/exec
-            conventional-changelog-conventionalcommits
+            @semantic-release/exec@6.0.2
+            conventional-changelog-conventionalcommits@4.6.1
