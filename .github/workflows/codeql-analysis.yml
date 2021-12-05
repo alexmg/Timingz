@@ -3,12 +3,16 @@ name: "CodeQL"
 on:
   push:
     branches: [ develop, master ]
-    paths-ignore:
-      - 'README.md'
+    paths:
+      - '**.cs'
+      - '**.csproj'
+      - '**.sln'
   pull_request:
     branches: [ develop ]
-    paths-ignore:
-      - 'README.md'
+    paths:
+      - '**.cs'
+      - '**.csproj'
+      - '**.sln'
   schedule:
     - cron: '31 12 * * 3'
 
