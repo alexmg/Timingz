@@ -23,14 +23,16 @@
 
   <PropertyGroup>
     <Authors>Alex Meyer-Gleaves</Authors>
+    <Company>Alex Meyer-Gleaves</Company>
+    <Description>Server Timing middleware implementation for ASP.NET Core</Description>
+    <Copyright>Copyright © 2021 Alex Meyer-Gleaves. All rights reserved.</Copyright>
     <PackageTags>server-timing;metrics</PackageTags>
     <PackageProjectUrl>https://github.com/alexmg/Timingz</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReleaseNotes>Release notes are at https://github.com/alexmg/Timingz/releases</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/alexmg/Timingz</RepositoryUrl>
-    <Description>Server Timing middleware implementation for ASP.NET Core</Description>
   </PropertyGroup>
 
   <ItemGroup>
