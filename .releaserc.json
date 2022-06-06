@@ -84,7 +84,7 @@
       {
         "assets": [
           {
-            "path": "artifacts/nuget/*.nupkg"
+            "path": "artifacts/nuget/*.*nupkg"
           }
         ]
       }
