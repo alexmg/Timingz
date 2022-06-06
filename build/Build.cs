@@ -139,7 +139,7 @@ class Build : NukeBuild
         .Executes(() => DotNetNuGetPush(s => s
             .SetSource($"https://nuget.pkg.github.com/{GetRepositoryOwner()}/index.json")
             .SetApiKey(GitHubToken)
-            .CombineWith(Glob.Files(NugetDirectory, "*.nupkg"), (ss, package) => ss
+            .CombineWith(Glob.Files(NugetDirectory, "*.*nupkg"), (ss, package) => ss
                 .SetTargetPath(NugetDirectory / package))));
 
     Target PublishNuGet => _ => _
@@ -149,6 +149,6 @@ class Build : NukeBuild
         .Executes(() => DotNetNuGetPush(s => s
             .SetSource("https://api.nuget.org/v3/index.json")
             .SetApiKey(NuGetApiKey)
-            .CombineWith(Glob.Files(NugetDirectory, "*.nupkg"), (ss, package) => ss
+            .CombineWith(Glob.Files(NugetDirectory, "*.*nupkg"), (ss, package) => ss
                 .SetTargetPath(NugetDirectory / package))));
 }
