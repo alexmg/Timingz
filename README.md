@@ -4,7 +4,7 @@
 
 Timingz is an ASP.NET Core middleware implementation for recording and communicating backend server metrics as outlined in the [Server Timing](https://www.w3.org/TR/server-timing/) specification. These timings can be viewed using the browser's developer tools and accessed using the [PerformanceServerTiming](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceServerTiming) interface.
 
-![alt Timing](assets/Timing.png)
+![alt Timing](https://raw.githubusercontent.com/alexmg/Timingz/master/assets/Timing.png)
 
 ## Features
 
@@ -233,7 +233,7 @@ Click the `Visualize` button when viewing the response body in Postman to see th
 
 The visualizer will display a message when the response does not contain a `Server-Timing` header or no values are present in the header. Metrics that have a name but no duration are listed at the top of the visualization to provide context for the values in the chart.
 
-![alt Postman Visualizer](assets/Postman-visualizer.png)
+![alt Postman Visualizer](https://raw.githubusercontent.com/alexmg/Timingz/master/assets/Postman-visualizer.png)
 
 ## Credits
 
