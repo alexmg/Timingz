@@ -124,6 +124,8 @@ class Build : NukeBuild
         .Executes(() => DotNetPack(s => s
             .SetConfiguration(Configuration.Release)
             .SetVersion(Version)
+            .EnableIncludeSymbols()
+            .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
             .SetOutputDirectory(NugetDirectory)
             .CombineWith(Glob.Files(SourceDirectory, "**/*.csproj"), (ss, project) => ss
                 .SetProject(SourceDirectory / project))));

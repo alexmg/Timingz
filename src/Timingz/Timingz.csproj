@@ -13,7 +13,6 @@
 
   <PropertyGroup>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <DebugType>embedded</DebugType>
     <IncludeSymbols>true</IncludeSymbols>
     <EmbedAllSources>true</EmbedAllSources>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
