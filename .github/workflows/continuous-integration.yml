@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint commits
-        uses: wagoid/commitlint-github-action@v4
+        uses: wagoid/commitlint-github-action@v5
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v1
