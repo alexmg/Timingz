@@ -1,5 +1,7 @@
 # Timingz
 
+<img src="https://raw.githubusercontent.com/alexmg/Timingz/develop/icon.png" style="float: left; margin: 0 20px 20px 0" alt="Timingz Logo" width="64"/>
+
 [![CI Build](https://github.com/alexmg/Timingz/workflows/CI%20Build/badge.svg?branch=develop)](https://github.com/alexmg/Timingz/actions?query=workflow%3A%22CI+Build%22) [![Coverage Status](https://img.shields.io/coveralls/github/alexmg/Timingz/develop)](https://coveralls.io/github/alexmg/Timingz?branch=develop) [![CodeQL](https://github.com/alexmg/Timingz/actions/workflows/codeql-analysis.yml/badge.svg?branch=develop)](https://github.com/alexmg/Timingz/actions/workflows/codeql-analysis.yml) [![Nuget](https://img.shields.io/nuget/v/Timingz?label=NuGet)](https://www.nuget.org/packages/Timingz) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/alexmg/Timingz/blob/master/LICENSE) [![Open in VS Code](https://img.shields.io/badge/Open%20in%20VS%20Code-blue?logo=visualstudiocode)](https://open.vscode.dev/alexmg/Timingz)
 
 Timingz is an ASP.NET Core middleware implementation for recording and communicating backend server metrics as outlined in the [Server Timing](https://www.w3.org/TR/server-timing/) specification. These timings can be viewed using the browser's developer tools and accessed using the [PerformanceServerTiming](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceServerTiming) interface.
