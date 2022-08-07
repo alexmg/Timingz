@@ -1,7 +1,6 @@
 using GlobExpressions;
 using Nuke.Common;
 using Nuke.Common.CI;
-using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -12,11 +11,11 @@ using Nuke.Common.Tools.Npm;
 using Nuke.Common.Tools.ReportGenerator;
 using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
+using Serilog;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
-[CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
 {
@@ -59,7 +58,7 @@ class Build : NukeBuild
 
     Target Verify => _ => _
         .Requires(() => IsLocalBuild || (!NuGetApiKey.IsNullOrEmpty() && !GitHubToken.IsNullOrEmpty()))
-        .Executes(() => Logger.Info(IsLocalBuild ? "Verify skipped for local build" : "Environment variables verified"));
+        .Executes(() => Log.Information("Environment variables verified"));
 
     Target Clean => _ => _
         .Before(Restore)
