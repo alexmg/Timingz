@@ -17,13 +17,7 @@
         "scope": "no-release",
         "release": false
       }
-    ],
-    "parserOpts": {
-      "noteKeywords": [
-        "BREAKING CHANGE",
-        "BREAKING CHANGES"
-      ]
-    }
+    ]
   },
   "generateNotes": {
     "preset": "conventionalcommits",
