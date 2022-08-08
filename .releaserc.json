@@ -10,6 +10,11 @@
     "preset": "conventionalcommits",
     "releaseRules": [
       {
+        "type": "docs",
+        "scope": "readme",
+        "release": "patch"
+      },
+      {
         "type": "build",
         "release": "patch"
       },

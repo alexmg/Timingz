@@ -4,8 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches: [ develop, master ]
-    paths-ignore:
-      - 'README.md'
 
 env:
   NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
