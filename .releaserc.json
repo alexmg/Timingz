@@ -38,7 +38,7 @@
         },
         {
           "type": "perf",
-          "section": ":fast_forward: Performance Improvements"
+          "section": ":rocket: Performance Improvements"
         },
         {
           "type": "revert",
@@ -51,7 +51,7 @@
         },
         {
           "type": "build",
-          "section": ":toolbox: Build System"
+          "section": ":construction_worker: Build System"
         }
       ]
     }
