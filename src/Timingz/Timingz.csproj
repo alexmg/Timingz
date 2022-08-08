@@ -50,8 +50,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleToSuffix Include=".Tests" />
-    <InternalsVisibleToSuffix Include=".PerformanceTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+    <InternalsVisibleTo Include="$(AssemblyName).PerformanceTests" />
   </ItemGroup>
 
 </Project>
