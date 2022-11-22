@@ -34,13 +34,13 @@ builder.Services.AddOpenTelemetryTracing(tracing => tracing
 builder.Services.Configure<AspNetCoreInstrumentationOptions>(options =>
     options.RecordException = true);
 
-builder.Host.ConfigureLogging(logging => logging.AddOpenTelemetry(options =>
+builder.Logging.AddOpenTelemetry(options =>
 {
     options.IncludeScopes = true;
     options.ParseStateValues = true;
     options.IncludeFormattedMessage = true;
     options.AddConsoleExporter();
-}));
+});
 
 var app = builder.Build();
 
