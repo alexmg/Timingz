@@ -10,6 +10,10 @@
     "preset": "conventionalcommits",
     "releaseRules": [
       {
+        "breaking": true,
+        "release": "major"
+      },
+      {
         "type": "docs",
         "scope": "readme",
         "release": "patch"
