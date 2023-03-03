@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "7cc24d45-d2a1-42cb-9e15-7940fc240488",
+		"_postman_id": "a7916edb-f7a2-492a-9320-40ed9ce0be2f",
 		"name": "Server-Timing Visualizer",
 		"description": "Visualize metric values from the `Server-Timing` response header in a horizontal bar chart. This brings to Postman a visualization similar to the chart shown in the developer tools of modern browsers.\r\n\r\n![Visualizer](https://raw.githubusercontent.com/alexmg/Timingz/develop/assets/Postman-visualizer.png)\r\n\r\nIf you would like to add [Server Timing](https://www.w3.org/TR/server-timing/) support to your ASP.NET Core application please consider the [Timingz](https://github.com/alexmg/Timingz) project on GitHub.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "335497"
 	},
 	"item": [
 		{
@@ -137,7 +138,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/sample?timing&desc&custom",
+					"raw": "http://localhost:5000/api/sample?timing=&desc=&custom=",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -420,7 +421,7 @@
 					"}",
 					"</style>",
 					"",
-					"<script src=\"https://cdn.jsdelivr.net/npm/chart.js@3.6.1/dist/chart.min.js\"></script>",
+					"<script src=\"https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.js\"></script>",
 					"",
 					"{{#if empty}}",
 					"    <div class=\"info\">No Server-Timing header values found</div>",
@@ -485,23 +486,25 @@
 					"            },",
 					"            indexAxis: 'y',",
 					"            scales: {",
-					"                xAxis: {",
-					"                    display: true,",
-					"                    scaleLabel: {",
+					"                x: {",
+					"                    title: {",
 					"                        display: true,",
-					"                        labelString: 'Duration',",
-					"                        fontSize: 16",
+					"                        text: 'Duration (ms)',",
+					"                        font: {",
+					"                            size: 16",
+					"                        }",
 					"                    },",
 					"                    ticks: {",
 					"                        beginAtZero: true",
 					"                    }",
 					"                },",
-					"                yAxis: {",
-					"                    display: true,",
-					"                    scaleLabel: {",
+					"                y: {",
+					"                    title: {",
 					"                        display: true,",
-					"                        labelString: 'Metric',",
-					"                        fontSize: 16",
+					"                        text: 'Metric',",
+					"                        font: {",
+					"                            size: 16",
+					"                        }",
 					"                    }",
 					"                }",
 					"            }",
