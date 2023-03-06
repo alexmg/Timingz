@@ -29,7 +29,7 @@ internal class ActivityMonitor : IDisposable
     private void OnActivityStopped(Activity activity)
     {
         if (activity.GetCustomProperty(CustomPropertyKey) == null
-            || _httpContextAccessor.HttpContext.RequestServices == null) return;
+            || _httpContextAccessor.HttpContext?.RequestServices == null) return;
 
         var serverTiming = _httpContextAccessor.HttpContext.RequestServices.GetService<IServerTiming>();
 
