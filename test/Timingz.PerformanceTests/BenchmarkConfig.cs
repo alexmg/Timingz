@@ -3,7 +3,7 @@ using BenchmarkDotNet.Diagnosers;
 
 namespace Timingz.PerformanceTests;
 
-internal class BenchmarkConfig : ManualConfig
+internal sealed class BenchmarkConfig : ManualConfig
 {
     internal BenchmarkConfig()
     {

@@ -2,7 +2,7 @@
 
 namespace WebApiSample.Services;
 
-public class SampleServerTimingCallback : IServerTimingCallback, IAsyncDisposable
+public sealed class SampleServerTimingCallback : IServerTimingCallback, IAsyncDisposable
 {
     public async Task OnServerTiming(ServerTimingEvent serverTimingEvent)
     {

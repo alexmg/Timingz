@@ -18,4 +18,4 @@ jobs:
           fetch-depth: 0
 
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2022.2.3
+        uses: JetBrains/qodana-action@v2023.1.1

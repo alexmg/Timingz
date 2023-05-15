@@ -1,3 +1,5 @@
+#pragma warning disable CA1852
+
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;

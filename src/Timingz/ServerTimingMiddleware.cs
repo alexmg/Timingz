@@ -1,15 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Timingz;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-internal class ServerTimingMiddleware
+internal partial class ServerTimingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ServerTimingOptions _options;
     private readonly ILogger<ServerTimingMiddleware> _logger;
     private readonly HeaderWriter _headerWriter;
+
+    [LoggerMessage(0, LogLevel.Warning, "Metric validation failed with error: {Error}")]
+    partial void LogValidationError(string error);
+
+    [LoggerMessage(1, LogLevel.Error, "Exception was thrown invoking Server Timing callback")]
+    partial void LogCallbackError(Exception exception);
 
     public ServerTimingMiddleware(RequestDelegate next,
         ServerTimingOptions options,
@@ -64,11 +71,7 @@ internal class ServerTimingMiddleware
         var metrics = serverTiming.GetMetrics();
 
         if (_options.ValidateMetrics && httpContext.Response.StatusCode != 500)
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var i = 0; i < metrics.Count; i++)
-                if (metrics[i] is IValidatableMetric validatableMetric)
-                    if (!validatableMetric.Validate(out var message))
-                        _logger.LogWarning("Metric validation failed with error: {Error}", message);
+            ValidateMetrics(metrics);
 
         if (!requestOptions.WriteHeader)
             return Task.CompletedTask;
@@ -79,6 +82,14 @@ internal class ServerTimingMiddleware
         _headerWriter.WriteHeaders(httpContext.Response.Headers, requestOptions.IncludeDescriptions, metrics);
 
         return Task.CompletedTask;
+    }
+
+    private void ValidateMetrics(IReadOnlyList<IMetric> metrics)
+    {
+        // ReSharper disable once ForCanBeConvertedToForeach
+        for (var i = 0; i < metrics.Count; i++)
+            if (metrics[i] is IValidatableMetric validatable && !validatable.Validate(out var message))
+                LogValidationError(message);
     }
 
     internal async Task OnResponseCompleted(
@@ -109,6 +120,6 @@ internal class ServerTimingMiddleware
         var innerExceptions = aggregationTask.Exception.InnerExceptions;
         // ReSharper disable once ForCanBeConvertedToForeach
         for (var i = 0; i < innerExceptions.Count; i++)
-            _logger.LogError(innerExceptions[i], "Exception was thrown invoking Server Timing callback");
+            LogCallbackError(innerExceptions[i]);
     }
 }

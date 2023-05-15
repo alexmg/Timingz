@@ -1,7 +1,9 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Diagnostics.CodeAnalysis;
+using BenchmarkDotNet.Attributes;
 
 namespace Timingz.PerformanceTests;
 
+[SuppressMessage("Performance", "CA1822:Mark members as static")]
 public class ServerTimingBenchmark
 {
     private const string MetricName = "Benchmark";

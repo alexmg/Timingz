@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;
 using Xunit;
 
@@ -12,9 +13,10 @@ public class ServerTimingMiddlewareTests
     private const string CustomMetricDescription = "my-description";
 
     private IEnumerable<IServerTimingCallback> _callbackServices;
-    private readonly TestLogger<ServerTimingMiddleware> _logger = new TestLogger<ServerTimingMiddleware>();
+    private readonly TestLogger<ServerTimingMiddleware> _logger = new();
 
     [Fact]
+    [SuppressMessage("Performance", "CA1806:Do not ignore method results")]
     public void ConstructorThrowsWhenRequestDelegateNull()
     {
         // ReSharper disable once ObjectCreationAsStatement
@@ -23,6 +25,7 @@ public class ServerTimingMiddlewareTests
     }
 
     [Fact]
+    [SuppressMessage("Performance", "CA1806:Do not ignore method results")]
     public void ConstructorThrowsWhenOptionsNull()
     {
         // ReSharper disable once ObjectCreationAsStatement
@@ -66,7 +69,6 @@ public class ServerTimingMiddlewareTests
     public async Task CustomMetricExcludedWhenCustomMetricsDisabled()
     {
         using var host = await BuildHost(
-            true,
             includeCustomMetrics: false,
             addTimings: serverTiming => serverTiming.Precalculated(CustomMetricName, 123.456, CustomMetricDescription));
         var client = host.GetTestClient();
@@ -98,7 +100,7 @@ public class ServerTimingMiddlewareTests
     {
         var includeOrigins = !string.IsNullOrEmpty(origin);
         var timingAllowOrigins = includeOrigins ? new List<string> { origin } : null;
-        using var host = await BuildHost(true, timingAllowOrigins: timingAllowOrigins);
+        using var host = await BuildHost(timingAllowOrigins: timingAllowOrigins);
         var client = host.GetTestClient();
 
         var response = await client.GetAsync("/");
@@ -111,7 +113,6 @@ public class ServerTimingMiddlewareTests
     public async Task TotalMetricMetricConfigurationApplied()
     {
         using var host = await BuildHost(
-            true,
             includeDescriptions: true,
             totalMetricName: CustomMetricName,
             totalMetricDescription: CustomMetricDescription);
@@ -130,7 +131,6 @@ public class ServerTimingMiddlewareTests
     public async Task WritesCustomMetricsToHeader(Action<IServerTiming> addTimings)
     {
         using var host = await BuildHost(
-            true,
             includeCustomMetrics: true,
             includeDescriptions: true,
             addTimings: addTimings);
@@ -328,7 +328,7 @@ public class ServerTimingMiddlewareTests
         };
     }
 
-    private class LogMessage
+    private sealed class LogMessage
     {
         public LogMessage(LogLevel logLevel, string message, Exception exception)
         {
@@ -344,7 +344,7 @@ public class ServerTimingMiddlewareTests
         public Exception Exception { get; }
     }
 
-    private class TestLogger<TName> : ILogger<TName>
+    private sealed class TestLogger<TName> : ILogger<TName>
     {
         private readonly IList<LogMessage> _logMessages = new List<LogMessage>();
 
@@ -370,7 +370,7 @@ public class ServerTimingMiddlewareTests
         }
     }
 
-    private class CallbackThatThrowsException : IServerTimingCallback
+    private sealed class CallbackThatThrowsException : IServerTimingCallback
     {
         private readonly string _message;
         private readonly bool _throwException;
@@ -384,11 +384,11 @@ public class ServerTimingMiddlewareTests
         public async Task OnServerTiming(ServerTimingEvent _)
         {
             await Task.Yield();
-            if (_throwException) throw new Exception(_message);
+            if (_throwException) throw new InvalidOperationException(_message);
         }
     }
 
-    private class CallbackThatRecordsEvent : IServerTimingCallback
+    private sealed class CallbackThatRecordsEvent : IServerTimingCallback
     {
         internal ServerTimingEvent Event { get; private set; }
 

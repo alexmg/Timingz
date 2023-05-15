@@ -23,20 +23,14 @@ public class ResponseStartingBenchmark
             new ActivityMonitor(null), null);
     }
 
-    // ReSharper disable UnassignedField.Global
-    // ReSharper disable MemberCanBePrivate.Global
+    [Params(true, false)]
+    public bool IncludeCustomMetrics { get; set; }
 
     [Params(true, false)]
-    public bool IncludeCustomMetrics;
+    public bool IncludeDescriptions { get; set; }
 
     [Params(true, false)]
-    public bool IncludeDescriptions;
-
-    [Params(true, false)]
-    public bool ValidateMetrics;
-
-    // ReSharper restore UnassignedField.Global
-    // ReSharper restore MemberCanBePrivate.Global
+    public bool ValidateMetrics { get; set; }
 
     [Benchmark]
     public Task OnResponseStarting()

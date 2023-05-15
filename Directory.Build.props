@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
+    <AnalysisMode>recommended</AnalysisMode>
   </PropertyGroup>
 
 </Project>

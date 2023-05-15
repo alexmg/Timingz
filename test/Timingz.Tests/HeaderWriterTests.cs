@@ -35,11 +35,11 @@ public class HeaderWriterTests
 
         const string metric1 = "foo";
         const double metric1Dur = 1.23d;
-        var metric1Desc = $"best {metric1} ever";
+        const string metric1Desc = $"best {metric1} ever";
 
         const string metric2 = "bar";
         const double metric2Dur = 4.56d;
-        var metric2Desc = $"best {metric2} ever";
+        const string metric2Desc = $"best {metric2} ever";
 
         yield return new object[]
         {

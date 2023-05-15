@@ -17,7 +17,7 @@ internal static class Factory
             .OfType<IServerTimingCallback>()
             .ToArray();
 
-    private class ServerTimingCallback : IServerTimingCallback
+    private sealed class ServerTimingCallback : IServerTimingCallback
     {
         public async Task OnServerTiming(ServerTimingEvent serverTimingEvent) => await Task.Yield();
     }

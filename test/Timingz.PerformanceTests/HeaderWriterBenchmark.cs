@@ -21,10 +21,8 @@ public class HeaderWriterBenchmark
         _headerWriter = new HeaderWriter(timingAllowOrigins);
     }
 
-    // ReSharper disable once MemberCanBePrivate.Global
-    // ReSharper disable once UnassignedField.Global
     [Params(true, false)]
-    public bool IncludeDescriptions;
+    public bool IncludeDescriptions { get; set; }
 
     [Benchmark]
     public void WriteHeaders() => _headerWriter.WriteHeaders(new HeaderDictionary(), IncludeDescriptions, _metrics);
