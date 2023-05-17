@@ -49,7 +49,7 @@ class Build : NukeBuild
     AbsolutePath CoverageResultDirectory => ArtifactsDirectory / "coverage";
     AbsolutePath CoverageReportDirectory => ArtifactsDirectory / "coverage-report";
 
-    IEnumerable<Project> TestProjects => Solution.GetProjects("*.Tests");
+    IEnumerable<Project> TestProjects => Solution.GetAllProjects("*.Tests");
 
     string GetRepositoryOwner() => GitRepository.Identifier.Split('/').First();
 
@@ -64,9 +64,9 @@ class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            TestDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            EnsureCleanDirectory(ArtifactsDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(path => path.DeleteDirectory());
+            TestDirectory.GlobDirectories("**/bin", "**/obj").ForEach(path => path.DeleteDirectory());
+            ArtifactsDirectory.CreateOrCleanDirectory();
         });
 
     Target Restore => _ => _
