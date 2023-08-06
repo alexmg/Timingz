@@ -21,7 +21,7 @@ Timingz is an ASP.NET Core middleware implementation for recording and communica
   - Include metric descriptions in the header or exclude to reduce size
   - Include only the total request duration or add custom metrics for more detail
 - Different types of metrics are available to cater for a range of usage scenarios:
-  - `Manaul` metrics can be manually started and stopped multiple times
+  - `Manual` metrics can be manually started and stopped multiple times
   - `Disposable` metrics can be wrapped in a `using` statement with the duration captured at the end of the statement block
   - `Marker` metrics do not contain a duration but can indicate significant events like a cache miss occuring
   - `Precalculated` metrics can record values captured from an existing timing mechanism
