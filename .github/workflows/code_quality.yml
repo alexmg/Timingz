@@ -18,8 +18,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2023.2
+      - name: Qodana Scan
+        uses: JetBrains/qodana-action@main
         with:
           upload-result: ${{ github.ref_name == 'main' || github.ref_name == 'develop' }}
           args: --baseline,qodana.sarif.json
