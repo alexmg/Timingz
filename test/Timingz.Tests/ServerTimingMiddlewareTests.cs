@@ -364,7 +364,7 @@ public class ServerTimingMiddlewareTests
             Exception exception,
             Func<TState, Exception, string> formatter)
         {
-            var message = formatter == null ? state.ToString() : formatter(state, exception);
+            var message = formatter(state, exception);
             var logMessage = new LogMessage(logLevel, message, exception);
             lock (_logMessages) _logMessages.Add(logMessage);
         }

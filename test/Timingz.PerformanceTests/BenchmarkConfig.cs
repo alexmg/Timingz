@@ -12,7 +12,7 @@ internal sealed class BenchmarkConfig : ManualConfig
         var baseDirectory = AppContext.BaseDirectory;
         var rootFolder = baseDirectory[..baseDirectory.LastIndexOf("bin", StringComparison.OrdinalIgnoreCase)];
         var runFolder = DateTime.Now.ToString("u").Replace(' ', '_').Replace(':', '-');
-        ArtifactsPath = $"{rootFolder}\\BenchmarkDotNet.Artifacts\\{runFolder}";
+        ArtifactsPath = $@"{rootFolder}\BenchmarkDotNet.Artifacts\{runFolder}";
 
         AddDiagnoser(MemoryDiagnoser.Default);
     }

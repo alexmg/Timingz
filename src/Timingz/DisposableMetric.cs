@@ -4,7 +4,7 @@ namespace Timingz;
 
 internal class DisposableMetric : Metric, IDisposable, IValidatableMetric
 {
-    private StartedClock _startedClock = Chronometer.Start();
+    private readonly StartedClock _startedClock = Chronometer.Start();
 
     internal DisposableMetric(string name, string description = null) : base(name, description)
     {

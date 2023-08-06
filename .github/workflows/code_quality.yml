@@ -11,6 +11,7 @@ on:
 
 jobs:
   qodana:
+    name: Qodana Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,4 +19,9 @@ jobs:
           fetch-depth: 0
 
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2023.1.1
+        uses: JetBrains/qodana-action@main
+        with:
+          upload-result: ${{ github.ref_name == 'main' || github.ref_name == 'develop' }}
+          args: --baseline,qodana.sarif.json
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}

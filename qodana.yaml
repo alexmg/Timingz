@@ -1,2 +1,18 @@
 version: "1.0"
-linter: jetbrains/qodana-dotnet:2023.1-eap
+linter: jetbrains/qodana-dotnet:latest
+failThreshold: 0
+profile: 
+  name: qodana.recommended
+
+dotnet:
+  solution: Timingz.sln
+  
+exclude:
+  - name: HeapView.BoxingAllocation
+  - name: HeapView.PossibleBoxingAllocation
+  - name: HeapView.ClosureAllocation
+  - name: HeapView.CanAvoidClosure
+  - name: HeapView.DelegateAllocation
+  - name: HeapView.ObjectAllocation
+  - name: HeapView.ObjectAllocation.Evident
+  - name: HeapView.ObjectAllocation.Possible

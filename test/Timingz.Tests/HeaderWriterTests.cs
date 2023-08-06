@@ -28,8 +28,8 @@ public class HeaderWriterTests
 
     public static IEnumerable<object[]> GetMetrics()
     {
-        const string origin1 = "http://origin1.com/";
-        const string origin2 = "http://origin2.com/";
+        const string origin1 = "https://origin1.com/";
+        const string origin2 = "https://origin2.com/";
         var timingAllowOrigins = new[] { origin1, origin2 };
         var emptyTimingAllowOrigins = Array.Empty<string>();
 

@@ -77,7 +77,7 @@ app.UseServerTiming(options =>
     });
 
     // Add any required origins for the Timing-Allow-Origin header.
-    options.TimingAllowOrigins = new[] { "http://example.com" };
+    options.TimingAllowOrigins = new[] { "https://example.com" };
 
     // You may want to invoke the callbacks with the timings to record them elsewhere,
     // even if you do not want to send the Server-Timing header in the response.

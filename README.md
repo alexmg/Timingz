@@ -81,7 +81,7 @@ app.UseServerTiming(options =>
     });
 
     // Add any required domains for the Timing-Allow-Origin header.
-    options.TimingAllowOrigins = new[] {"http://example.com"};
+    options.TimingAllowOrigins = new[] {"https://example.com"};
 
     // Enable/disable the invocation of callback services.
     options.InvokeCallbackServices = true;

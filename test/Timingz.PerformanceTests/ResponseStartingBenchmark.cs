@@ -24,12 +24,15 @@ public class ResponseStartingBenchmark
     }
 
     [Params(true, false)]
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public bool IncludeCustomMetrics { get; set; }
 
     [Params(true, false)]
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public bool IncludeDescriptions { get; set; }
 
     [Params(true, false)]
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public bool ValidateMetrics { get; set; }
 
     [Benchmark]

@@ -22,6 +22,7 @@ public class HeaderWriterBenchmark
     }
 
     [Params(true, false)]
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public bool IncludeDescriptions { get; set; }
 
     [Benchmark]
