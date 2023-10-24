@@ -1,4 +1,7 @@
-﻿namespace Timingz;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+
+namespace Timingz;
 
 internal class Metric : IMetric
 {
@@ -16,4 +19,8 @@ internal class Metric : IMetric
         Name = name;
         Description = description;
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    protected static double GetElapsedMilliseconds(long start) =>
+        (Stopwatch.GetTimestamp() - start) * 1000 / (double)Stopwatch.Frequency;
 }

@@ -29,7 +29,6 @@ Timingz is an ASP.NET Core middleware implementation for recording and communica
 - In addition to being sent in the `Server-Timing` header, metrics captured during the request can also be sent to another service or metrics package after the request has been completed
 - Integration with the [.NET Activity API](https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Api/README.md#instrumenting-a-libraryapplication-with-net-activity-api) and [OpenTelemtry .NET](https://github.com/open-telemetry/opentelemetry-dotnet) allows existing `Activity` based metrics to be included in the `Server-Timing` header and exported to OpenTelemetry exporters
 - The `Timing-Allow-Origin` header can be included with configurable domains
-- Durations are measured with the best available platform API using the [Perfolizer (Performance analysis toolkit)](https://github.com/AndreyAkinshin/perfolizer) library
 - Header values are written using the [ZString (Zero Allocation StringBuilder)](https://github.com/Cysharp/ZString) library to minimise memory allocations
 
 ## Getting started

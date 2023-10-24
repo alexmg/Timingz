@@ -1,41 +1,41 @@
-﻿using Perfolizer.Horology;
+﻿using System.Diagnostics;
 
 namespace Timingz;
 
 internal class ManualMetric : Metric, IManualMetric, IValidatableMetric
 {
-    private StartedClock? _startedClock;
+    private long? _started;
 
     internal ManualMetric(string name, string description = null) : base(name, description)
     {
     }
 
-    public bool IsRunning => _startedClock.HasValue;
+    public bool IsRunning => _started.HasValue;
 
     public void Start()
     {
-        if (_startedClock.HasValue)
+        if (_started.HasValue)
             throw new InvalidOperationException("The manual timing has already been started.");
 
-        _startedClock = Chronometer.Start();
+        _started = Stopwatch.GetTimestamp();
     }
 
     public void Stop()
     {
-        if (!_startedClock.HasValue)
+        if (!_started.HasValue)
             throw new InvalidOperationException("The manual timing has not been started.");
 
-        var elapsed = _startedClock.Value.GetElapsed();
-        _startedClock = null;
+        var elapsed = GetElapsedMilliseconds(_started.Value);
+        _started = null;
 
-        Duration = (Duration ?? 0) + elapsed.GetTimeValue().ToMilliseconds();
+        Duration = (Duration ?? 0) + elapsed;
     }
 
     public bool Validate(out string message)
     {
         message = default;
 
-        if (_startedClock.HasValue)
+        if (_started.HasValue)
         {
             message = $"The manual timing '{Name}' was started and not stopped.";
             return false;

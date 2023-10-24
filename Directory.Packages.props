@@ -23,7 +23,6 @@
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.4.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.4" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.4" />
-    <PackageVersion Include="Perfolizer" Version="0.3.5" />
     <PackageVersion Include="System.Diagnostics.DiagnosticSource" Version="7.0.2" />
     <PackageVersion Include="xunit" Version="2.5.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.0">

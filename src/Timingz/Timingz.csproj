@@ -44,7 +44,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
-    <PackageReference Include="Perfolizer" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" />
     <PackageReference Include="ZString" />
   </ItemGroup>
