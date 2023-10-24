@@ -55,6 +55,30 @@ public class ServerTimingOptionsTests
     }
 
     [Fact]
+    public void DurationPrecisionInitializedToDefault()
+    {
+        var options = new ServerTimingOptions();
+        options.DurationPrecision.Should().Be(ServerTimingOptions.DefaultDurationPrecision);
+    }
+    
+    [Theory]
+    [InlineData(-1, false)]
+    [InlineData(0, true)]
+    [InlineData(1, true)]
+    [InlineData(15, true)]
+    [InlineData(16, false)]
+    public void DurationPrecisionPropertyValidatesValue(int precision, bool valid)
+    {
+        var options = new ServerTimingOptions();
+        Action validate = () => options.DurationPrecision = precision;
+        if (valid)
+            validate.Should().NotThrow();
+        else
+            validate.Should().Throw<ArgumentException>()
+                .Which.ParamName.Should().Contain(nameof(ServerTimingOptions.DurationPrecision));
+    }
+
+    [Fact]
     public void ValidateMetricsInitializedToFalse()
     {
         var options = new ServerTimingOptions();

@@ -18,7 +18,7 @@ public class HeaderWriterBenchmark
             "https://origin1.com/",
             "https://origin2.com/"
         };
-        _headerWriter = new HeaderWriter(timingAllowOrigins);
+        _headerWriter = new HeaderWriter(timingAllowOrigins, ServerTimingOptions.DefaultDurationPrecision);
     }
 
     [Params(true, false)]

@@ -26,7 +26,7 @@ internal partial class ServerTimingMiddleware
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _logger = logger;
 
-        _headerWriter = new HeaderWriter(options.TimingAllowOrigins);
+        _headerWriter = new HeaderWriter(options.TimingAllowOrigins, options.DurationPrecision);
         activityMonitor.Initialize(options);
     }
 

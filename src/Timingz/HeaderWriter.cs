@@ -5,16 +5,18 @@ namespace Timingz;
 
 internal class HeaderWriter
 {
+    private readonly int _durationPrecision;
     private readonly string _timingAllowOriginValue;
 
     internal const string TimingAllowOriginHeaderName = "Timing-Allow-Origin";
     internal const string ServerTimingHeaderName = "Server-Timing";
 
-    internal HeaderWriter(IEnumerable<string> timingAllowOrigins)
+    internal HeaderWriter(IEnumerable<string> timingAllowOrigins, int durationPrecision)
     {
         var origins = timingAllowOrigins?.ToArray();
         if (origins?.Length > 0)
             _timingAllowOriginValue = ZString.Join(",", origins);
+        _durationPrecision = durationPrecision;
     }
 
     internal void WriteHeaders(
@@ -31,7 +33,7 @@ internal class HeaderWriter
         headers.Append(ServerTimingHeaderName, serverTimingValue);
     }
 
-    private static string BuildServerTimingHeader(IReadOnlyList<IMetric> metrics, bool includeDescription)
+    private string BuildServerTimingHeader(IReadOnlyList<IMetric> metrics, bool includeDescription)
     {
         using var builder = ZString.CreateStringBuilder(true);
 
@@ -42,7 +44,7 @@ internal class HeaderWriter
             builder.Append(metric.Name);
 
             if (metric.Duration.HasValue)
-                builder.AppendFormat(";dur={0}", metric.Duration.Value);
+                builder.AppendFormat(";dur={0}", Math.Round(metric.Duration.Value, _durationPrecision));
 
             if (includeDescription && !string.IsNullOrWhiteSpace(metric.Description))
                 builder.AppendFormat(";desc=\"{0}\"", metric.Description);

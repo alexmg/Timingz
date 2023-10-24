@@ -87,6 +87,9 @@ app.UseServerTiming(options =>
 
     // Enable/disable the validation of metrics.
     options.ValidateMetrics = env.IsDevelopment();
+    
+    // Precision of duration values written to header (default 3). 
+    options.DurationPrecision = 3;
 });
 ```
 

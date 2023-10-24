@@ -14,7 +14,7 @@ public class HeaderWriterTests
         string expectedServerTiming,
         string expectedTimingAllowOrigin = null)
     {
-        var headerWriter = new HeaderWriter(timingAllowOrigins);
+        var headerWriter = new HeaderWriter(timingAllowOrigins, ServerTimingOptions.DefaultDurationPrecision);
         var headers = new HeaderDictionary();
         headerWriter.WriteHeaders(headers, includeDescription, metrics);
 
@@ -33,12 +33,12 @@ public class HeaderWriterTests
         var timingAllowOrigins = new[] { origin1, origin2 };
         var emptyTimingAllowOrigins = Array.Empty<string>();
 
+        var metric1Dur = Math.Round(1.2345d, ServerTimingOptions.DefaultDurationPrecision);
         const string metric1 = "foo";
-        const double metric1Dur = 1.23d;
         const string metric1Desc = $"best {metric1} ever";
 
+        var metric2Dur = Math.Round(4.5678d, ServerTimingOptions.DefaultDurationPrecision);
         const string metric2 = "bar";
-        const double metric2Dur = 4.56d;
         const string metric2Desc = $"best {metric2} ever";
 
         yield return new object[]

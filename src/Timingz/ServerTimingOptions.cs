@@ -5,6 +5,9 @@ namespace Timingz;
 public class ServerTimingOptions
 {
     private string _totalMetricName = DefaultTotalMetricName;
+    private int _durationPrecision = DefaultDurationPrecision;
+
+    internal const int DefaultDurationPrecision = 3;
 
     internal const string DefaultTotalMetricName = "total";
 
@@ -33,6 +36,19 @@ public class ServerTimingOptions
     public bool ValidateMetrics { get; set; }
 
     public HashSet<string> ActivitySources { get; } = new();
+
+    public int DurationPrecision
+    {
+        get => _durationPrecision;
+        set
+        {
+            if (value is < 0 or > 15)
+                throw new ArgumentOutOfRangeException(
+                    nameof(DurationPrecision),
+                    "The precision must be between 0 and 15, inclusive.");
+            _durationPrecision = value;
+        }
+    }
 
     internal Action<HttpContext, RequestTimingOptions> ConfigureRequestTimingOptions { get; private set; } = (_, _) => { };
 }
