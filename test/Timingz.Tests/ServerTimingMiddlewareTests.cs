@@ -346,12 +346,14 @@ public class ServerTimingMiddlewareTests
 
     private sealed class TestLogger<TName> : ILogger<TName>
     {
-        private readonly IList<LogMessage> _logMessages = new List<LogMessage>();
+        private readonly List<LogMessage> _logMessages = [];
 
-        public IList<LogMessage> GetLogMessages()
+#pragma warning disable CA1859
+        public IReadOnlyList<LogMessage> GetLogMessages()
         {
-            lock (_logMessages) return _logMessages.ToList();
+            lock (_logMessages) return _logMessages.AsReadOnly();
         }
+#pragma warning restore CA1859
 
         public IDisposable BeginScope<TState>(TState state) => null;
 

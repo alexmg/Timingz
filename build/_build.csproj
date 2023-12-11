@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="7.0.1" />
+    <PackageReference Include="Nuke.Common" Version="7.0.6" />
     <PackageDownload Include="ReportGenerator" Version="[4.8.12]" />
   </ItemGroup>
 

@@ -75,9 +75,11 @@ app.UseServerTiming(options =>
         // You can choose to include additional metrics (other than the request total duration) conditionally.
         requestOptions.IncludeCustomMetrics = query.ContainsKey("custom");
     });
-
+    
     // Add any required origins for the Timing-Allow-Origin header.
+#pragma warning disable CA1861
     options.TimingAllowOrigins = new[] { "https://example.com" };
+#pragma warning restore CA1861
 
     // You may want to invoke the callbacks with the timings to record them elsewhere,
     // even if you do not want to send the Server-Timing header in the response.

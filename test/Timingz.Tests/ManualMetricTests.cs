@@ -102,7 +102,7 @@ public class ManualMetricTests
     [Fact]
     public void IsRunningUpdatedWhenStartingAndStopping()
     {
-        IManualMetric metric = new ManualMetric(Name, Description);
+        var metric = new ManualMetric(Name, Description);
         metric.IsRunning.Should().BeFalse();
 
         metric.Start();

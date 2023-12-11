@@ -28,9 +28,9 @@ public class ServerTimingEventTests
                 RemotePort = 80
             }
         };
-        httpContext.Request.Headers.Add("foo", "bar");
+        httpContext.Request.Headers.Append("foo", "bar");
         httpContext.Response.StatusCode = 200;
-        httpContext.Response.Headers.Add("foo", "bar");
+        httpContext.Response.Headers.Append("foo", "bar");
 
         var metric1 = new Metric("foo");
         var metric2 = new Metric("bar");
