@@ -19,8 +19,9 @@ public class ResponseCompletedBenchmark
         _middleware = new ServerTimingMiddleware(
             _ => Task.CompletedTask,
             new ServerTimingOptions(),
-            new ActivityMonitor(null),
-            null);
+            new ActivityMonitor(null!),
+            new MeterMonitor(null!),
+            null!);
     }
 
     [Benchmark]

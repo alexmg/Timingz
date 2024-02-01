@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.Metrics;
+using FluentAssertions;
 using Xunit;
 
 namespace Timingz.Tests;
@@ -109,5 +110,23 @@ public class ServerTimingOptionsTests
         Action validate = () => options.TotalMetricName = totalMetricName;
         validate.Should().Throw<ArgumentException>()
             .Which.ParamName.Should().Contain(nameof(ServerTimingOptions.TotalMetricName));
+    }
+
+    [Fact]
+    public void HistogramFilterReturnsFalseByDefault()
+    {
+        var options = new ServerTimingOptions();
+        var meter = new Meter("Test");
+        options.HistogramFilter(meter.CreateHistogram<double>("Test")).Should().BeFalse();
+    }
+
+    [Fact]
+    public void HistogramFilterCanBeReplaced()
+    {
+        var options = new ServerTimingOptions();
+        var meter = new Meter("Test");
+        var histogram = meter.CreateHistogram<double>("Test");
+        options.HistogramFilter = h => h == histogram;
+        options.HistogramFilter(histogram).Should().BeTrue();
     }
 }

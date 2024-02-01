@@ -20,8 +20,9 @@ public class InvokeBenchmark
         _middleware = new ServerTimingMiddleware(
             _ => Task.CompletedTask,
             _serverTimingOptions,
-            new ActivityMonitor(null),
-            null);
+            new ActivityMonitor(null!),
+            new MeterMonitor(null!),
+            null!);
         _callbacks = Factory.CreateCallbacks(1);
     }
 

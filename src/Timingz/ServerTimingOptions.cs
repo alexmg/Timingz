@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Http;
 
 namespace Timingz;
 
@@ -36,6 +37,8 @@ public class ServerTimingOptions
     public bool ValidateMetrics { get; set; }
 
     public HashSet<string> ActivitySources { get; } = new();
+
+    public Func<Histogram<double>, bool> HistogramFilter { get; set; } = _ => false;
 
     public int DurationPrecision
     {

@@ -20,7 +20,7 @@ public class ResponseStartingBenchmark
         _serverTimingOptions = new ServerTimingOptions();
         _requestTimingOptions = new RequestTimingOptions { WriteHeader = true };
         _middleware = new ServerTimingMiddleware(_ => Task.CompletedTask, _serverTimingOptions,
-            new ActivityMonitor(null), null);
+            new ActivityMonitor(null!), new MeterMonitor(null!), null!);
     }
 
     [Params(true, false)]

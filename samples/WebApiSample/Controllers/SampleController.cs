@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using Microsoft.AspNetCore.Mvc;
 using Timingz;
 
@@ -11,12 +12,21 @@ namespace WebApiSample.Controllers;
 public class SampleController : ControllerBase
 {
     private readonly IServerTiming _serverTiming;
+    private readonly IMeterFactory _meterFactory;
 
-    public SampleController(IServerTiming serverTiming) => _serverTiming = serverTiming;
+    public SampleController(IServerTiming serverTiming, IMeterFactory meterFactory)
+    {
+        _serverTiming = serverTiming;
+        _meterFactory = meterFactory;
+    }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        // This example Histogram instrument will be monitored and is included as a metric.
+        var meter = _meterFactory.Create(Telemetry.MeterName);
+        var randomDurationHistogram = meter.CreateHistogram<double>("random.duration", "ms", "Random duration");
+
         // This activity measures the duration of the action method and is included as a metric.
         using var actionActivity = Telemetry.Source.StartActivity("Action").AddServerTiming("GET action method");
 
@@ -49,6 +59,9 @@ public class SampleController : ControllerBase
             await Task.Delay(15);
             cacheMetric.Stop();
         }
+
+        // Record a random value for the Histogram instrument.
+        randomDurationHistogram.Record(Random.Shared.Next(100, 200));
 
         // A disposable metric is started immediately and the duration is captured at the point of disposal.
         using (_serverTiming.Disposable("bus", "Send notification to bus"))

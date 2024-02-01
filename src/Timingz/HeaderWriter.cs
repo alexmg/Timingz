@@ -6,7 +6,7 @@ namespace Timingz;
 internal class HeaderWriter
 {
     private readonly int _durationPrecision;
-    private readonly string _timingAllowOriginValue;
+    private readonly string? _timingAllowOriginValue;
 
     internal const string TimingAllowOriginHeaderName = "Timing-Allow-Origin";
     internal const string ServerTimingHeaderName = "Server-Timing";

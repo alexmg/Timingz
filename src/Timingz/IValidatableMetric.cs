@@ -1,6 +1,8 @@
-﻿namespace Timingz;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Timingz;
 
 internal interface IValidatableMetric
 {
-    bool Validate(out string message);
+    bool Validate([NotNullWhen(false)] out string? message);
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Timingz;
 
@@ -6,7 +7,7 @@ internal class ManualMetric : Metric, IManualMetric, IValidatableMetric
 {
     private long? _started;
 
-    internal ManualMetric(string name, string description = null) : base(name, description)
+    internal ManualMetric(string name, string? description = null) : base(name, description)
     {
     }
 
@@ -31,9 +32,9 @@ internal class ManualMetric : Metric, IManualMetric, IValidatableMetric
         Duration = (Duration ?? 0) + elapsed;
     }
 
-    public bool Validate(out string message)
+    public bool Validate([NotNullWhen(false)] out string? message)
     {
-        message = default;
+        message = null;
 
         if (_started.HasValue)
         {

@@ -90,6 +90,12 @@ app.UseServerTiming(options =>
     
     // Precision of duration values written to header (default 3). 
     options.DurationPrecision = 3;
+
+    // Activity Source that should be monitored for AddServerTiming calls.
+    options.ActivitySources.Add(Telemetry.Source.Name);
+
+    // Histogram instruments that should be monitored and included as metrics.
+    options.HistogramFilter = histogram => histogram.Meter.Name == Telemetry.MeterName && histogram.Unit == "ms";
 });
 ```
 

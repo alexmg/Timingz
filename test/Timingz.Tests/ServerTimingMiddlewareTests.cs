@@ -1,11 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.TestHost;
 using Xunit;
 
 namespace Timingz.Tests;
 
-public class ServerTimingMiddlewareTests
+public sealed class ServerTimingMiddlewareTests : IDisposable
 {
     private const string DurationParameterName = "dur";
     private const string DescriptionParameterName = "desc";
@@ -14,22 +14,30 @@ public class ServerTimingMiddlewareTests
 
     private IEnumerable<IServerTimingCallback> _callbackServices;
     private readonly TestLogger<ServerTimingMiddleware> _logger = new();
+    private readonly ActivityMonitor _activityMonitor = new(A.Fake<IHttpContextAccessor>());
+    private readonly MeterMonitor _meterMonitor = new(A.Fake<IHttpContextAccessor>());
 
     [Fact]
-    [SuppressMessage("Performance", "CA1806:Do not ignore method results")]
     public void ConstructorThrowsWhenRequestDelegateNull()
     {
-        // ReSharper disable once ObjectCreationAsStatement
-        Action ctr = () => new ServerTimingMiddleware(null, new ServerTimingOptions(), new ActivityMonitor(null), null);
+        var ctr = () => new ServerTimingMiddleware(
+            null!,
+            new ServerTimingOptions(),
+            _activityMonitor,
+            _meterMonitor,
+            _logger);
         ctr.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("next");
     }
 
     [Fact]
-    [SuppressMessage("Performance", "CA1806:Do not ignore method results")]
     public void ConstructorThrowsWhenOptionsNull()
     {
-        // ReSharper disable once ObjectCreationAsStatement
-        Action ctr = () => new ServerTimingMiddleware(_ => Task.CompletedTask, null, new ActivityMonitor(null), null);
+        var ctr = () => new ServerTimingMiddleware(
+            _ => Task.CompletedTask,
+            null!,
+            _activityMonitor,
+            _meterMonitor,
+            _logger);
         ctr.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("options");
     }
 
@@ -260,7 +268,7 @@ public class ServerTimingMiddlewareTests
                     {
                         options.InvokeCallbackServices = invokeCallbackServices;
                         options.ValidateMetrics = validateMetrics;
-                        options.TimingAllowOrigins = timingAllowOrigins;
+                        options.TimingAllowOrigins = timingAllowOrigins ?? Array.Empty<string>();
                         options.TotalMetricName = totalMetricName;
                         options.TotalMetricDescription = totalMetricDescription;
                         options.WithRequestTimingOptions((_, timingOptions) =>
@@ -399,5 +407,11 @@ public class ServerTimingMiddlewareTests
             Event = serverTimingEvent;
             return Task.CompletedTask;
         }
+    }
+
+    public void Dispose()
+    {
+        _activityMonitor?.Dispose();
+        _meterMonitor?.Dispose();
     }
 }

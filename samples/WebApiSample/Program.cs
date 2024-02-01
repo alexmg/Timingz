@@ -2,6 +2,7 @@
 
 using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Timingz;
@@ -25,16 +26,20 @@ builder.Services.AddScoped<IServerTimingCallback, SampleServerTimingCallback>();
 // Configure OpenTelemetry tracing to see our custom Activity
 // being exported and included in the Server-Timing header.
 builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource =>
+        resource.AddService(builder.Environment.ApplicationName))
+    .WithMetrics(metrics => metrics
+        .AddMeter(Telemetry.MeterName)
+        .AddAspNetCoreInstrumentation()
+        .AddConsoleExporter((_, readerOptions) =>
+            readerOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 10_000))
     .WithTracing(tracing => tracing
-        .SetResourceBuilder(ResourceBuilder
-            .CreateDefault()
-            .AddService(builder.Environment.ApplicationName))
         .AddSource(Telemetry.Source.Name)
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
         .AddConsoleExporter());
 
-builder.Services.Configure<AspNetCoreInstrumentationOptions>(options =>
+builder.Services.Configure<AspNetCoreTraceInstrumentationOptions>(options =>
     options.RecordException = true);
 
 builder.Logging.AddOpenTelemetry(options =>
@@ -96,6 +101,9 @@ app.UseServerTiming(options =>
 
     // Add the Activity Source that should be monitored for AddServerTiming calls.
     options.ActivitySources.Add(Telemetry.Source.Name);
+
+    // Configure which Histogram instruments should be monitored and included in the Server-Timing header.
+    options.HistogramFilter = histogram => histogram.Meter.Name == Telemetry.MeterName && histogram.Unit == "ms";
 });
 
 app.Run();

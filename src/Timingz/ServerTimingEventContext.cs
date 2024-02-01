@@ -39,7 +39,7 @@ public class ServerTimingEventContext
 
     public string Protocol { get; }
 
-    public IPAddress RemoteIpAddress { get; }
+    public IPAddress? RemoteIpAddress { get; }
 
     public int RemotePort { get; }
 

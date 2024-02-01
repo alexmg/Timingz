@@ -6,7 +6,7 @@ public static class ActivityExtensions
 {
     private static readonly object CustomValue = new();
 
-    public static Activity AddServerTiming(this Activity activity, string description = null)
+    public static Activity? AddServerTiming(this Activity? activity, string? description = null)
     {
         if (activity != null && !string.IsNullOrEmpty(description))
             activity.DisplayName = description;

@@ -18,10 +18,10 @@ public class ActivityListenerServiceTests
         using var monitor = CreateListenerService(serverTiming);
 
         var activity1 = Source.StartActivity("Test1").AddServerTiming();
-        activity1.Stop();
+        activity1!.Stop();
 
         var activity2 = Source.StartActivity("Test2").AddServerTiming();
-        activity2.Stop();
+        activity2!.Stop();
 
         A.CallTo(() => serverTiming.Precalculated("Test1", A<double>._, null)).MustHaveHappenedOnceExactly();
         A.CallTo(() => serverTiming.Precalculated("Test2", A<double>._, null)).MustHaveHappenedOnceExactly();

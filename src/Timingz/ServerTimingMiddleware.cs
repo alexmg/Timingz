@@ -17,9 +17,11 @@ internal partial class ServerTimingMiddleware
     [LoggerMessage(1, LogLevel.Error, "Exception was thrown invoking Server Timing callback")]
     partial void LogCallbackError(Exception exception);
 
-    public ServerTimingMiddleware(RequestDelegate next,
+    public ServerTimingMiddleware(
+        RequestDelegate next,
         ServerTimingOptions options,
         ActivityMonitor activityMonitor,
+        MeterMonitor meterMonitor,
         ILogger<ServerTimingMiddleware> logger)
     {
         _next = next ?? throw new ArgumentNullException(nameof(next));
@@ -27,7 +29,9 @@ internal partial class ServerTimingMiddleware
         _logger = logger;
 
         _headerWriter = new HeaderWriter(options.TimingAllowOrigins, options.DurationPrecision);
+
         activityMonitor.Initialize(options);
+        meterMonitor.Initialize(options);
     }
 
     // ReSharper disable once UnusedMember.Global

@@ -6,7 +6,7 @@ public static class ApplicationBuilderExtensions
 {
     public static IApplicationBuilder UseServerTiming(
         this IApplicationBuilder app,
-        Action<ServerTimingOptions> configureOptions = null)
+        Action<ServerTimingOptions>? configureOptions = null)
     {
         if (app == null) throw new ArgumentNullException(nameof(app));
 

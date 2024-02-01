@@ -7,7 +7,7 @@ namespace Timingz;
 internal class ActivityMonitor : IDisposable
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private ActivityListener _listener;
+    private ActivityListener? _listener;
 
     internal const string CustomPropertyKey = "__Timingz";
 
@@ -31,8 +31,7 @@ internal class ActivityMonitor : IDisposable
         if (activity.GetCustomProperty(CustomPropertyKey) == null
             || _httpContextAccessor.HttpContext?.RequestServices == null) return;
 
-        var serverTiming = _httpContextAccessor.HttpContext.RequestServices.GetService<IServerTiming>();
-
+        var serverTiming = _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<IServerTiming>();
         var description = activity.OperationName != activity.DisplayName ? activity.DisplayName : null;
         serverTiming.Precalculated(activity.OperationName, activity.Duration.TotalMilliseconds, description);
     }
