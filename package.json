@@ -4,10 +4,10 @@
     "commit": "git-cz"
   },
   "devDependencies": {
-    "@commitlint/cli": "17.6.1",
-    "@commitlint/config-conventional": "14.1.0",
-    "@commitlint/cz-commitlint": "^17.5.0",
-    "commitizen": "^4.2.4"
+    "@commitlint/cli": "19.4.0",
+    "@commitlint/config-conventional": "19.2.2",
+    "@commitlint/cz-commitlint": "19.4.0",
+    "commitizen": "4.3.0"
   },
   "config": {
     "commitizen": {
