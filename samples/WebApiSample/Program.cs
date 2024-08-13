@@ -34,7 +34,7 @@ builder.Services.AddOpenTelemetry()
         .AddHttpClientInstrumentation()
         .AddConsoleExporter());
 
-builder.Services.Configure<AspNetCoreInstrumentationOptions>(options =>
+builder.Services.Configure<AspNetCoreTraceInstrumentationOptions>(options =>
     options.RecordException = true);
 
 builder.Logging.AddOpenTelemetry(options =>
