@@ -1,10 +1,14 @@
-﻿using Cysharp.Text;
+﻿using System.Text.RegularExpressions;
+using Cysharp.Text;
 using Microsoft.AspNetCore.Http;
 
 namespace Timingz;
 
-internal class HeaderWriter
+internal partial class HeaderWriter
 {
+    [GeneratedRegex(@"[^(\w!#$%&'*+\-.^`|~)]", RegexOptions.IgnoreCase, "en-US")]
+    internal static partial Regex InvalidTokenCharacters();
+
     private readonly int _durationPrecision;
     private readonly string _timingAllowOriginValue;
 
@@ -41,7 +45,9 @@ internal class HeaderWriter
         {
             var metric = metrics[i];
 
-            builder.Append(metric.Name);
+            // See token definition in https://datatracker.ietf.org/doc/html/rfc7230#appendix-B
+            var escapedName = InvalidTokenCharacters().Replace(metric.Name, "_");
+            builder.Append(escapedName);
 
             if (metric.Duration.HasValue)
                 builder.AppendFormat(";dur={0}", Math.Round(metric.Duration.Value, _durationPrecision));
