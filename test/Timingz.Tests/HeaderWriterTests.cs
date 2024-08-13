@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -209,20 +210,16 @@ public class HeaderWriterTests
 
         public void Deserialize(IXunitSerializationInfo info)
         {
-            Metrics = info.GetValue<IMetric[]>(nameof(Metrics));
-            IncludeDescription = info.GetValue<bool>(nameof(IncludeDescription));
-            TimingAllowOrigins = info.GetValue<string[]>(nameof(TimingAllowOrigins));
-            ExpectedServerTiming = info.GetValue<string>(nameof(ExpectedServerTiming));
-            ExpectedTimingAllowOrigin = info.GetValue<string>(nameof(ExpectedTimingAllowOrigin));
+            var data = info.GetValue<string>("data");
+            var testCase = JsonSerializer.Deserialize<MetricTestCase>(data);
+            Metrics = testCase.Metrics;
+            IncludeDescription = testCase.IncludeDescription;
+            TimingAllowOrigins = testCase.TimingAllowOrigins;
+            ExpectedServerTiming = testCase.ExpectedServerTiming;
+            ExpectedTimingAllowOrigin = testCase.ExpectedTimingAllowOrigin;
         }
 
-        public void Serialize(IXunitSerializationInfo info)
-        {
-            info.AddValue(nameof(Metrics), Metrics);
-            info.AddValue(nameof(IncludeDescription), IncludeDescription);
-            info.AddValue(nameof(TimingAllowOrigins), TimingAllowOrigins);
-            info.AddValue(nameof(ExpectedServerTiming), ExpectedServerTiming);
-            info.AddValue(nameof(ExpectedTimingAllowOrigin), ExpectedTimingAllowOrigin);
-        }
+        public void Serialize(IXunitSerializationInfo info) =>
+            info.AddValue("data", JsonSerializer.Serialize(this));
     }
 }
