@@ -26,7 +26,6 @@
       "enum": [
         "Clean",
         "Compile",
-        "Cover",
         "Pack",
         "Prepare",
         "Publish",

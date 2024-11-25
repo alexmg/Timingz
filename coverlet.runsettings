@@ -4,10 +4,10 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat Code Coverage">
         <Configuration>
-          <Format>lcov</Format>
+          <Format>opencover</Format>
           <ExcludeByFile>**/GitVersionInformation.g.cs</ExcludeByFile>
           <IncludeTestAssembly>false</IncludeTestAssembly>
-          <UseSourceLink>false</UseSourceLink>
+          <UseSourceLink>true</UseSourceLink>
         </Configuration>
       </DataCollector>
     </DataCollectors>

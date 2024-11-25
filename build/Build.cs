@@ -1,6 +1,7 @@
 using GlobExpressions;
 using Nuke.Common;
 using Nuke.Common.CI;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
@@ -46,8 +47,6 @@ class Build : NukeBuild
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath NugetDirectory => ArtifactsDirectory / "nuget";
     AbsolutePath TestResultDirectory => ArtifactsDirectory / "test-results";
-    AbsolutePath CoverageResultDirectory => ArtifactsDirectory / "coverage";
-    AbsolutePath CoverageReportDirectory => ArtifactsDirectory / "coverage-report";
 
     IEnumerable<Project> TestProjects => Solution.GetAllProjects("*.Tests");
 
@@ -95,28 +94,15 @@ class Build : NukeBuild
             .EnableNoBuild()
             .ResetVerbosity()
             .SetResultsDirectory(TestResultDirectory)
-            .EnableCollectCoverage()
-            .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
-            .SetExcludeByFile("*.Generated.cs")
-            .CombineWith(TestProjects, (_, v) => _
-                .SetProjectFile(v)
-                .SetLoggers($"trx;LogFileName={v.Name}.trx;FailureBodyFormat=Verbose")
-                .SetCoverletOutput($"{CoverageResultDirectory}/{v.Name}.xml"))));
-
-    Target Cover => _ => _
-        .DependsOn(Test)
-        .Consumes(Test)
-        .Produces(CoverageResultDirectory / "lcov.info")
-        .Executes(() =>
-        {
-            ReportGenerator(_ => _
-                .SetFramework("net5.0")
-                .SetReports(CoverageResultDirectory / "*.xml")
-                .SetTargetDirectory(CoverageReportDirectory)
-                .SetReportTypes("lcov")
-                .When(IsLocalBuild, _ => _
-                    .AddReportTypes(ReportTypes.HtmlInline)));
-        });
+            .CombineWith(TestProjects, (_, project) => _
+                .SetProjectFile(project)
+                .When(GitHubActions.Instance is not null && project.HasPackageReference("GitHubActionsTestLogger"),
+                    settings => settings.AddLoggers("GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true")
+                        .AddRunSetting("RunConfiguration.CollectSourceInformation", "true"))
+                .AddLoggers($"trx;LogFileName={project.Name}.trx;FailureBodyFormat=Verbose")
+                .When(project.HasPackageReference("coverlet.collector"),
+                    settings => settings.SetDataCollector("XPlat Code Coverage")
+                        .SetSettingsFile("coverlet.runsettings")))));
 
     Target Pack => _ => _
         .DependsOn(Clean, Restore)
