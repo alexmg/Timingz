@@ -5,7 +5,7 @@ namespace Timingz.PerformanceTests;
 
 public class ResponseStartingBenchmark
 {
-    private HttpContext _httpContext;
+    private DefaultHttpContext _httpContext;
     private IServerTiming _serverTiming;
     private ServerTimingMiddleware _middleware;
     private ServerTimingOptions _serverTimingOptions;

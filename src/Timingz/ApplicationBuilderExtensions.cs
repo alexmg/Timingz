@@ -8,7 +8,7 @@ public static class ApplicationBuilderExtensions
         this IApplicationBuilder app,
         Action<ServerTimingOptions> configureOptions = null)
     {
-        if (app == null) throw new ArgumentNullException(nameof(app));
+        ArgumentNullException.ThrowIfNull(app);
 
         var options = new ServerTimingOptions();
         configureOptions?.Invoke(options);
@@ -20,8 +20,8 @@ public static class ApplicationBuilderExtensions
         this IApplicationBuilder app,
         ServerTimingOptions options)
     {
-        if (app == null) throw new ArgumentNullException(nameof(app));
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(app);
+        ArgumentNullException.ThrowIfNull(options);
 
         return app.UseMiddleware<ServerTimingMiddleware>(options);
     }
